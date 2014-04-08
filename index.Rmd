@@ -1,0 +1,33 @@
+---
+title       : Large Scale Learning in R
+subtitle    : 
+author      : Wush Wu
+job         : Taiwan R User Group
+framework   : io2012        # {io2012, html5slides, shower, dzslides, ...}
+highlighter : highlight.js  # {highlight.js, prettify, highlight}
+hitheme     : zenburn       # 
+widgets     : []            # {mathjax, quiz, bootstrap}
+mode        : selfcontained # {standalone, draft}
+license: by-nc-sa
+logo: Taiwan-R-logo.png
+--- .segue .dark
+
+```{r setup, include=FALSE,echo = F, message = F, warning = F, tidy = F}
+# make this an external chunk that can be included in any file
+library(xtable)
+library(reshape2)
+library(knitr)
+options(width = 100,digits=3)
+opts_chunk$set(message = FALSE, eval=TRUE,fig.align = "center", warning = FALSE, comment = NA, dpi = 100, fig.width=6, fig.height=4.5,tidy = FALSE, cache = FALSE, echo=FALSE)
+
+options(xtable.type = 'html')
+knit_hooks$set(inline = function(x) {
+  if(is.numeric(x)) {
+    round(x, getOption('digits'))
+  } else {
+    paste(as.character(x), collapse = ', ')
+  }
+})
+knit_hooks$set(plot = knitr:::hook_plot_html)
+```
+
