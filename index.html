@@ -82,9 +82,343 @@
   <!-- Presenter Notes -->
 </slide>
 
-<h1>巨量資料很紅，但是資料多，真的有用嗎？</h1>
+<slide class="large" id="slide-3">
+<hgroup>
+  
+</hgroup>
+<article class = 'flexbox vcenter'>
+<p>巨量資料很熱</p>
 
-<slide class="" id="slide-4" style="background:;">
+</article>
+<!-- Presenter Notes -->
+</slide>
+<slide class="large" id="slide-4">
+<hgroup>
+  
+</hgroup>
+<article class = 'flexbox vcenter'>
+<p>但是資料多，真的有用嗎？</p>
+
+<h3>Garbage in, garbage out</h3>
+
+</article>
+<!-- Presenter Notes -->
+</slide>
+<slide class="large" id="slide-5">
+<hgroup>
+  
+</hgroup>
+<article class = 'flexbox vcenter'>
+<p>讓資料說話</p>
+
+<h3>讓資料自己來證明它是不是垃圾</h3>
+
+</article>
+<!-- Presenter Notes -->
+</slide>
+<slide class="" id="slide-6" style="background:;">
+  <hgroup>
+    <h2>如何驗證資料是不是垃圾？</h2>
+  </hgroup>
+  <article data-timings="">
+    <ul>
+<li>整理資料</li>
+<li><strong>從資料中學習</strong></li>
+<li>驗證學習的成果</li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="dark segue quote" id="slide-7" style="background:;">
+  <hgroup>
+    <h2>Large Scale Learning in R</h2>
+  </hgroup>
+  <article data-timings="">
+    
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="large" id="slide-8">
+<hgroup>
+  
+</hgroup>
+<article class = 'flexbox vcenter'>
+<p>這年頭，不「大」就不行了？</p>
+
+<h3>資料大不是重點，資料的價值才是重點</h3>
+
+<h3>最近手上的資料也越來越大了</h3>
+
+</article>
+<!-- Presenter Notes -->
+</slide>
+<slide class="large" id="slide-9">
+<hgroup>
+  
+</hgroup>
+<article class = 'flexbox vcenter'>
+<p>資料太大，建立了分析資料的門檻</p>
+
+<h3>畫張圖給老闆就花了我一整天了</h3>
+
+<h3>請不要忘記「抽樣」這招</h3>
+
+</article>
+<!-- Presenter Notes -->
+</slide>
+<slide class="large" id="slide-10">
+<hgroup>
+  
+</hgroup>
+<article class = 'flexbox vcenter'>
+<p>今天，我希望能分享跨過門檻的經驗</p>
+
+<p>和所有目前用R 遇到資料太大的同好分享</p>
+
+<p><img src="assets/img/cooperation.jpeg" style="fit100" </img></p>
+
+</article>
+<!-- Presenter Notes -->
+</slide>
+<slide class="large" id="slide-11">
+<hgroup>
+  
+</hgroup>
+<article class = 'flexbox vcenter'>
+<p>不是教大家用R 處理GB/TB/PB等級的資料</p>
+
+<h3>多大的資料才算大資料？</h3>
+
+</article>
+<!-- Presenter Notes -->
+</slide>
+<slide class="large" id="slide-12">
+<hgroup>
+  
+</hgroup>
+<article class = 'flexbox vcenter'>
+<p>只要當你「覺得」，R 處理資料太慢了</p>
+
+</article>
+<!-- Presenter Notes -->
+</slide>
+<slide class="" id="slide-13" style="background:;">
+  <hgroup>
+    <h2>找出慢的理由</h2>
+  </hgroup>
+  <article data-timings="">
+    <ul>
+<li>記憶體不夠了</li>
+<li>迴圈的效能太差了</li>
+<li>資料讀取的太慢了</li>
+<li>演算法的時間複雜度太差了</li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="large" id="slide-14">
+<hgroup>
+  
+</hgroup>
+<article class = 'flexbox vcenter'>
+<p>記憶體的效能，是硬碟的1000倍</p>
+
+</article>
+<!-- Presenter Notes -->
+</slide>
+<slide class="" id="slide-15" style="background:;">
+  <hgroup>
+    <h2>怎麼知道記憶體不夠了？</h2>
+  </hgroup>
+  <article data-timings="">
+    <h3>查詢物件的記憶體用量</h3>
+
+<pre><code class="r">object.size(iris)
+</code></pre>
+
+<pre><code>## 7088 bytes
+</code></pre>
+
+<h3>利用作業系統的工具查R 的記憶體用量</h3>
+
+<ul>
+<li>Windows : Ctrl + Alt + Delete</li>
+<li>Linux : htop</li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-16" style="background:;">
+  <hgroup>
+    <h2>物件的複製，Copy On Write</h2>
+  </hgroup>
+  <article data-timings="">
+    <ul>
+<li>利用<code>tracemem</code>指令可以追蹤物件的複製</li>
+<li>儘量不要修改物件的內容</li>
+<li>修改大data.frame的時候，可以使用data.table套件
+
+<ul>
+<li>data.table::set 可以新增或刪除data.table中的column而不複製整個物件(請參考<a href="http://stackoverflow.com/questions/17891519/is-it-possible-to-modify-a-data-frame-in-place-destructively?answertab=active#tab-top">Stack Overflow上的說明</a>)</li>
+</ul></li>
+<li>也可以使用Rcpp來直接修改物件的內容</li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-17" style="background:;">
+  <hgroup>
+    <h2>記憶體不夠怎麼辦？</h2>
+  </hgroup>
+  <article data-timings="">
+    <ul>
+<li>買記憶體或買新電腦吧！（四萬塊可以買到64G）</li>
+<li>使用資料庫系統，更有效率的使用硬碟</li>
+<li>使用更有效率的資料結構：
+
+<ul>
+<li>矩陣大部分是0 的時候，使用Matrix套件的Sparse Matrix結構</li>
+<li>大量重復的字串資料，可以使用factor物件來節省記憶體</li>
+</ul></li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="large" id="slide-18">
+<hgroup>
+  
+</hgroup>
+<article class = 'flexbox vcenter'>
+<p>改善效能</p>
+
+</article>
+<!-- Presenter Notes -->
+</slide>
+<slide class="" id="slide-19" style="background:;">
+  <hgroup>
+    <h2>評估效能</h2>
+  </hgroup>
+  <article data-timings="">
+    <ul>
+<li>可利用<code>rbenchmark</code>或<code>microbenchmark</code>來測量效能</li>
+<li>利用<code>Rprof</code>來測量整段程式中，各種函數的計算時間</li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-20" style="background:;">
+  <hgroup>
+    <h2>加速R 的方法</h2>
+  </hgroup>
+  <article data-timings="">
+    <ul>
+<li>利用compiler::cmpfun來將函數編譯成byte code</li>
+<li>使用parallel套件來運用CPU的多核心</li>
+<li>使用Rcpp套件來快速開發C++程式提升效能</li>
+<li><a href="http://www.r-bloggers.com/for-faster-r-use-openblas-instead-better-than-atlas-trivial-to-switch-to-on-ubuntu/">利用OpenBLAS來加速矩陣運算</a></li>
+<li>使用別人寫好的高效能套件</li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="large" id="slide-21">
+<hgroup>
+  
+</hgroup>
+<article class = 'flexbox vcenter'>
+<p>改善資料讀取的速度</p>
+
+</article>
+<!-- Presenter Notes -->
+</slide>
+<slide class="" id="slide-22" style="background:;">
+  <hgroup>
+    <h2>克服資料讀取效能的方法</h2>
+  </hgroup>
+  <article data-timings="">
+    <ul>
+<li>儲存成壓縮格式（把硬碟讀取時間變成CPU的時間）</li>
+<li>SSD</li>
+<li>分散式叢集Hadoop, Spark</li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="large" id="slide-23">
+<hgroup>
+  
+</hgroup>
+<article class = 'flexbox vcenter'>
+<p>演算法</p>
+
+</article>
+<!-- Presenter Notes -->
+</slide>
+<slide class="" id="slide-24" style="background:;">
+  <hgroup>
+    <h2>如何改善演算法的效能</h2>
+  </hgroup>
+  <article data-timings="">
+    <ul>
+<li>了解自己需要的操作是什麼</li>
+<li>查詢的操作，使用data.table套件的indexing，或是hash套件的hash</li>
+<li>重複使用計算後的結果</li>
+<li>改善最佳化的演算法
+
+<ul>
+<li>SGD v.s. Iterative Optimization</li>
+<li>Online Learning</li>
+</ul></li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="segue dark" id="slide-25" style="background:;">
+  <hgroup>
+    <h2>經驗分享</h2>
+  </hgroup>
+  <article data-timings="">
+    
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-26" style="background:;">
+  <hgroup>
+    <h2>自身專案經驗分享</h2>
+  </hgroup>
+  <article data-timings="">
+    <h3>目標</h3>
+
+<p>從大量的瀏覽記錄中，學習出推薦方法</p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-27" style="background:;">
+  <hgroup>
+    <h2>單面像的學習</h2>
+  </hgroup>
   <article data-timings="">
     
   </article>
@@ -109,7 +443,7 @@
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=3 title='巨量資料很紅，但是資料多，真的有用嗎？'>
+        data-slide=3 title=''>
          3
       </a>
     </li>
@@ -117,6 +451,144 @@
       <a href="#" target="_self" rel='tooltip' 
         data-slide=4 title=''>
          4
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=5 title=''>
+         5
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=6 title='如何驗證資料是不是垃圾？'>
+         6
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=7 title='Large Scale Learning in R'>
+         7
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=8 title=''>
+         8
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=9 title=''>
+         9
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=10 title=''>
+         10
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=11 title=''>
+         11
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=12 title=''>
+         12
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=13 title='找出慢的理由'>
+         13
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=14 title=''>
+         14
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=15 title='怎麼知道記憶體不夠了？'>
+         15
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=16 title='物件的複製，Copy On Write'>
+         16
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=17 title='記憶體不夠怎麼辦？'>
+         17
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=18 title=''>
+         18
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=19 title='評估效能'>
+         19
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=20 title='加速R 的方法'>
+         20
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=21 title=''>
+         21
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=22 title='克服資料讀取效能的方法'>
+         22
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=23 title=''>
+         23
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=24 title='如何改善演算法的效能'>
+         24
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=25 title='經驗分享'>
+         25
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=26 title='自身專案經驗分享'>
+         26
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=27 title='單面像的學習'>
+         27
       </a>
     </li>
   </ul>
