@@ -1,0 +1,10 @@
+base
+datasets
+graphics
+grDevices
+knitr
+reshape2
+slidify
+stats
+utils
+xtable
