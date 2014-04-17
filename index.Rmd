@@ -6,15 +6,15 @@ job         : Taiwan R User Group
 framework   : io2012        # {io2012, html5slides, shower, dzslides, ...}
 highlighter : highlight.js  # {highlight.js, prettify, highlight}
 hitheme     : zenburn       # 
-widgets     : []            # {mathjax, quiz, bootstrap}
+widgets     : [mathjax]            # {mathjax, quiz, bootstrap}
 mode        : selfcontained # {standalone, draft}
 license: by-nc-sa
 logo: Taiwan-R-logo.png
---- &twocol
-
+--- .quote .segue .nobackground .dark
 ```{r setup, include=FALSE,echo = F, message = F, warning = F, tidy = F}
 # make this an external chunk that can be included in any file
 library(xtable)
+library(rbenchmark)
 library(reshape2)
 library(knitr)
 options(width = 100,digits=3)
@@ -31,6 +31,45 @@ knit_hooks$set(inline = function(x) {
 knit_hooks$set(plot = knitr:::hook_plot_html)
 ```
 
+<q><span class = 'white'>巨量資料<br/>掀起生活、工作和思考方式的革新</span></q>
+
+--- &vcenter .large
+
+巨量資料很熱
+
+--- &vcenter .large
+
+為了發揮資料的價值，我們要向資料學習
+
+### 大資料不重要，大價值才重要
+
+--- &vcenter .large
+
+但是資料太多，學習時就遇到困難
+
+--- &vcenter .large
+
+挖資訊，變得很慢
+
+### 畫張圖給老闆就花了我一整天了
+
+### 請不要忘記「抽樣」這招，但是怎麼抽？
+
+--- .dark .segue .quote
+
+## Large Scale Learning in R
+
+--- &vcenter .large
+
+今天，希望能分享跨過門檻的經驗
+
+和所有目前用R 遇到資料太大的同好分享
+
+<img src="assets/img/cooperation.jpeg" class="fit100" </img>
+
+--- &twocol
+
+
 *** =left
 
 ## 關於講者
@@ -42,63 +81,6 @@ knit_hooks$set(plot = knitr:::hook_plot_html)
 *** =right
 
 <img class="fit100" src="assets/img/wush.jpg"/>
-
---- .quote .segue .nobackground .dark
-
-<q><span class = 'white'>巨量資料<br/>掀起生活、工作和思考方式的革新</span></q>
-
---- &vcenter .large
-
-巨量資料很熱
-
---- &vcenter .large
-
-但是資料多，真的有用嗎？
-
-### Garbage in, garbage out
-
---- &vcenter .large
-
-讓資料說話
-
-### 讓資料自己來證明它是不是垃圾
-
----
-
-## 如何驗證資料是不是垃圾？
-
-- 整理資料
-- **從資料中學習**
-- 驗證學習的成果
-
---- .dark .segue .quote
-
-## Large Scale Learning in R
-
---- &vcenter .large
-
-這年頭，不「大」就不行了？
-
-### 資料大不是重點，資料的價值才是重點
-
-### 最近手上的資料也越來越大了
-
---- &vcenter .large
-
-資料太大，建立了分析資料的門檻
-
-### 畫張圖給老闆就花了我一整天了
-
-### 請不要忘記「抽樣」這招
-
---- &vcenter .large
-
-今天，我希望能分享跨過門檻的經驗
-
-和所有目前用R 遇到資料太大的同好分享
-
-<img src="assets/img/cooperation.jpeg" style="fit100" </img>
-
 --- &vcenter .large
 
 不是教大家用R 處理GB/TB/PB等級的資料
@@ -109,20 +91,93 @@ knit_hooks$set(plot = knitr:::hook_plot_html)
 
 只要當你「覺得」，R 處理資料太慢了
 
----
-
-## 找出慢的理由
-
-- 記憶體不夠了
-- 迴圈的效能太差了
-- 資料讀取的太慢了
-- 演算法的時間複雜度太差了
+希望能在這次演講中學到解決的方法
 
 --- &vcenter .large
 
-記憶體的效能，是硬碟的1000倍
+找出慢的理由
+
+### 記憶體不夠了
+### 迴圈的效能太差了
+### 資料讀取的太慢了
+### 演算法的時間複雜度太差了
+
+--- &vcenter .large
+
+找出慢的理由
+
+整體測試
+
+`Rprof`
+
+--- &vcenter .large
+
+`Rprof`示範(參考[stackoverflow](http://stackoverflow.com/questions/3650862/how-to-efficiently-use-rprof-in-r))
+
+--- &twocol
+
+*** =left
+
+### 一個大data.frame
+
+```{r, eval=FALSE, tidy=FALSE}
+n <- 1000
+x <- data.frame(group = 
+    sample(letters[1:4], 
+    n, replace=TRUE), 
+  condition = 
+    sample(LETTERS[1:10], n, 
+           replace = TRUE), 
+  data = rnorm(n))
+```
+
+### 合理的算法
+
+```{r, eval=FALSE, tidy=FALSE}
+marginal.means.1 <- aggregate(
+  data ~ group + condition, 
+  data = x, FUN=mean)
+```
+
+*** =right
+
+### 不合理的算法
+
+```{r, eval=FALSE, tidy=FALSE}
+marginal.means.2 <- 
+  marginal.means.1[NULL,]
+
+row.counter <- 1
+for (condition in levels(x$condition)) {
+  for (group in levels(x$group)) {  
+    # 省略掉...
+  }
+}
+```
+
+### 使用Rprof
+
+```{r, eval=FALSE, tidy=FALSE}
+Rprof("profile1.out", line.profiling=TRUE)
+eval(parse(file = 
+  "http://pastebin.com/download.php?i=KjdkSVZq", 
+  keep.source=TRUE))
+Rprof(NULL)
+```
 
 ---
+
+### 解讀`profile1.out`
+
+```{r, eval=FALSE}
+summaryRprof("profile1.out", lines = "show")$by.self
+```
+
+```{r, echo=FALSE, results='asis'}
+print(xtable(summaryRprof("profile1.out", lines = "show")$by.self), type="html")
+```
+
+--- &twocol
 
 ## 怎麼知道記憶體不夠了？
 
@@ -137,17 +192,73 @@ object.size(iris)
 - Windows : Ctrl + Alt + Delete
 - Linux : htop
 
---- 
+--- &vcenter
 
-## 物件的複製，Copy On Write
+<img src="assets/img/Windows.png" class="fit100"/>
 
-- 利用`tracemem`指令可以追蹤物件的複製
-- 儘量不要修改物件的內容
-- 修改大data.frame的時候，可以使用data.table套件
-    - data.table::set 可以新增或刪除data.table中的column而不複製整個物件(請參考[Stack Overflow上的說明](http://stackoverflow.com/questions/17891519/is-it-possible-to-modify-a-data-frame-in-place-destructively?answertab=active#tab-top))
-- 也可以使用Rcpp來直接修改物件的內容
+--- &vcenter .large
 
----
+物件的複製
+
+Copy On Write
+
+![](assets/img/CopyOnWrite.png)
+
+--- &vcenter .large
+
+利用`tracemem`指令可以追蹤物件的複製
+
+--- &twocol
+
+## `data.table`、`tracemem`使用範例
+
+*** =left
+
+```{r tracemem.data.table}
+library(data.table)
+data(mtcars)
+tracemem(mtcars)
+set(mtcars, j="mpg", 
+    value=NULL)
+```
+
+*** =right
+
+```{r tracemem.data.frame, dependson="tracemem.data.table"}
+tracemem(mtcars)
+mtcars[, "mpg"] <- NULL
+```
+
+--- &twocol
+
+## Rcpp的Modify In Place範例
+
+*** =left
+
+```{r rcpp_tracemem, engine='Rcpp', results='hold', cache=TRUE}
+#include <Rcpp.h>
+
+using namespace Rcpp;
+
+//[[Rcpp::export]] 
+SEXP fill(NumericVector v, double value) {
+  v.fill(value);
+  return v;
+} 
+```
+
+*** =right
+
+```{r rcpp_tracemem_r, dependson="rcpp_tracemem", cache=TRUE}
+a <- numeric(100)
+tracemem(a) 
+invisible(fill(a, 1.0))
+head(a)
+a[] <- 2
+head(a)
+```
+
+--- &twocol
 
 ## 記憶體不夠怎麼辦？
 
@@ -155,86 +266,458 @@ object.size(iris)
 - 使用資料庫系統，更有效率的使用硬碟
 - 使用更有效率的資料結構：
     - 矩陣大部分是0 的時候，使用Matrix套件的Sparse Matrix結構
-    - 大量重復的字串資料，可以使用factor物件來節省記憶體
+    - 大量重復的字串資料，可試著使用factor物件來節省記憶體
+
+*** =left
+
+```{r mem1}
+library(Matrix); data(KNex)
+class(KNex$mm)[1]
+object.size(KNex$mm)
+```
+
+*** =right
+
+```{r mem2, dependson="mem1"}
+mm <- as(KNex$mm, "matrix")
+class(mm)
+object.size(mm)
+```
 
 --- &vcenter .large
 
-改善效能
+加快運算速度
 
----
+--- &vcenter .large
 
-## 評估效能
+改善的方法
 
-- 可利用`rbenchmark`或`microbenchmark`來測量效能
-- 利用`Rprof`來測量整段程式中，各種函數的計算時間
+### 利用compiler::cmpfun來將函數編譯成byte code
+### 使用別人寫好的高效能套件
+### 使用parallel套件來運用CPU的多核心
+### 使用Rcpp套件來快速開發C++程式提升效能
+### [利用OpenBLAS來加速矩陣運算](http://www.r-bloggers.com/for-faster-r-use-openblas-instead-better-than-atlas-trivial-to-switch-to-on-ubuntu/)
 
----
+--- 
 
-## 加速R 的方法
+## Compiler 效能比較
 
-- 利用compiler::cmpfun來將函數編譯成byte code
-- 使用parallel套件來運用CPU的多核心
-- 使用Rcpp套件來快速開發C++程式提升效能
-- [利用OpenBLAS來加速矩陣運算](http://www.r-bloggers.com/for-faster-r-use-openblas-instead-better-than-atlas-trivial-to-switch-to-on-ubuntu/)
-- 使用別人寫好的高效能套件
+```{r compiler, cache = TRUE}
+library(compiler)
+f <- function(n, x=1) for (i in 1:n) x=1/(1+x)
+lf <- cmpfun(f)
+N <- 1e6
+library(rbenchmark)
+benchmark(
+  f(N, 1),
+  lf(N, 1)
+  )
+```
+
+--- &vcenter .large
+
+包成套件後，預設會使用byte code
+
+### DESCRIPTION: ByteCompile
+
+--- &vcenter .large
+
+OpenBLAS比較
+
+--- &vcenter .large
+
+Parallel & Bootstrap
+
+```{r parallel-bootstrap, cache = TRUE}
+library(boot)
+f <- function(df, i) {
+  df.sampled <- df[i,]
+  lm(dist ~ speed, df.sampled)$coef[1]
+}
+benchmark(replications=10,
+  boot(cars, f, R=1000, parallel="multicore"),
+  boot(cars, f, R=1000, parallel="no")
+  )
+```
 
 --- &vcenter .large
 
 改善資料讀取的速度
 
----
+--- &vcenter .large
 
-## 克服資料讀取效能的方法
+加強資料讀取的效能
 
-- 儲存成壓縮格式（把硬碟讀取時間變成CPU的時間）
-- SSD
-- 分散式叢集Hadoop, Spark
+### 儲存成壓縮格式（把硬碟讀取時間變成CPU的時間）
+### SSD
+### 分散式讀取
+
+--- 
+
+## 分散式讀取
+
+```{r, echo=FALSE, results='asis'}
+readtime <- read.csv("../readtime.csv")
+rownames(readtime) <- readtime[,1]
+readtime <- readtime[,-1]
+colnames(readtime) <- local({
+  tmp <- colnames(readtime)
+  sprintf("%s台機器", substring(tmp, 2, nchar(tmp)))
+})
+rownames(readtime) <- local({
+  tmp <- rownames(readtime)
+  sprintf("%s倍資料", tmp)
+})
+print(xtable(readtime), type="html")
+```
+
+--- &vcenter .large
+
+Spark 
+
+<img src="assets/img/Spark.png" class="fit100"/>
+
+--- &vcenter .large
+
+Single Machine
+
+```
+2014-04-17 19:20:02 INFO::Table 201404071810 is existed
+2014-04-17 19:20:02 INFO::Table 201404071850 is existed
+...
+2014-04-17 19:21:37 INFO::parsing 047/20140417/ExposeLog201404171720.txt ...
+2014-04-17 19:21:40 INFO::parsing 025/20140417/ExposeLog201404171720.txt ...
+2
+...
+2014-04-17 19:27:22 INFO::parsing 017/PersonLog201404171730.txt
+2014-04-17 19:27:46 INFO::parsing 017/PersonLog201404171730.txt
+...
+2014-04-17 19:46:14 INFO::{
+    "ETag": "\"1467fb79cc5ea56dc156ab37eeb413cb\""
+}
+```
 
 --- &vcenter .large
 
 演算法
 
----
+--- &vcenter .large
 
-## 如何改善演算法的效能
+如何改善演算法及實作的效能
 
-- 了解自己需要的操作是什麼
-- 查詢的操作，使用data.table套件的indexing，或是hash套件的hash
-- 重複使用計算後的結果
-- 改善最佳化的演算法
-    - SGD v.s. Iterative Optimization
-    - Online Learning
+### 改善資料結構
+### 改善最佳化的演算法
+
+--- &vcenter .large
+
+查詢的效能比較
+
+(取自[ptt](http://www.ptt.cc/bbs/R_Language/M.1396729914.A.B34.html))
+
+從iris選取Sepal.Width為3.5的row
+
+### m: `data.frame`
+### m2: `data.table` with indexing
+### m3: `matrix`
+
+補上平台：windows 7 64 bit SP1, R 3.0.3, i7-3700K@4.3GHz
+
+--- &vcenter .large
+
+200倍的iris(3萬rows)
+
+```r
+                                          expr replications elapsed relative
+4                filter(m, Sepal.Width == 3.5)          100    0.05      1.0
+5               filter(m2, Sepal.Width == 3.5)          100    0.14      2.8
+7 m[fmatch(m$Sepal.Width, 3.5, nomatch = 0), ]          100    0.25      5.0
+1                    m[m$Sepal.Width == 3.5, ]          100    0.44      8.8
+8 m2[fmatch(m2$Sepal.Width, 3.5, nomatch = 0)]          100    0.33      6.6
+3                                   m2[J(3.5)]          100    0.17      3.4
+6                                m2[list(3.5)]          100    0.14      2.8
+9                         m3[m3[, 2] == 3.5, ]          100    0.22      4.4
+2                subset(m, Sepal.Width == 3.5)          100    0.55     11.0
+```
+
+--- &vcenter .large
+
+5000倍的iris(75萬rows)
+
+```r
+                                          expr replications elapsed relative
+4                filter(m, Sepal.Width == 3.5)          100    1.46    5.214
+5               filter(m2, Sepal.Width == 3.5)          100    0.84    3.000
+7 m[fmatch(m$Sepal.Width, 3.5, nomatch = 0), ]          100    6.46   23.071
+1                    m[m$Sepal.Width == 3.5, ]          100   10.71   38.250
+8 m2[fmatch(m2$Sepal.Width, 3.5, nomatch = 0)]          100    7.37   26.321
+3                                   m2[J(3.5)]          100    0.28    1.000
+6                                m2[list(3.5)]          100    0.34    1.214
+9                         m3[m3[, 2] == 3.5, ]          100    4.96   17.714
+2                subset(m, Sepal.Width == 3.5)          100   13.67   48.821
+```
 
 --- .segue .dark
 
-## 經驗分享
+## 實務經驗分享
 
----
+--- &vcenter .large
 
-## 自身專案經驗分享
+廣告無所不在
 
-### 目標
+<img src="assets/img/disp.png" class="fit100" />
+
+--- &vcenter .large
+
+<img src="assets/img/OnlineAd.png" class="fit100" />
+
+--- &vcenter .large
 
 從大量的瀏覽記錄中，學習出推薦方法
 
-### 資料格式
+<img src="assets/img/Data.png" class="fit100" />
 
-```{r, results='asis', echo=FALSE}
-demo <- data.frame(
-  is_click = c(T, F, F, F),
-  ad = c("A", "A", "B", "C"),
-  website = c("www.a...", "www.b...", "www.c...", "www.a...")
-  )
+--- &vcenter .large
+
+具體而言，
+
+以下是「從資料學習」的一個起點
+
+--- &vcenter .large
+
+Logistic Regression
+
+$$P( y | x ) = \frac{1}{1 + e^{- y w^T x}}$$
+
+### $y$: 有沒有點擊
+### $x$: 相關參數
+### $w \in \mathbb{R}^d$: 模型
+
+--- &vcenter .large
+
+有這些instances
+
+$$(y_1, x_1), (y_2, x_2), ...(y_n, x_n)$$
+
+--- &vcenter .large
+
+$n \sim 10^9$ 系統更新後指數會再往上跑
+
+$d \sim 10^4$ 至 $10^7$
+
+--- &vcenter .large
+
+Regularized Loss:
+
+$$f(w) = \frac{1}{2} w^T w + C \sum_{i=1}^n {log(1 + e^{-y_i w^T x_i})}$$
+
+定出 $(y_1, x_1), ...$ 之後，
+理想的模型 $w$ 是讓 $f$ 最小的點*
+
+--- &vcenter .large
+
+[Google](http://static.googleusercontent.com/media/research.google.com/zh-TW//pubs/archive/41159.pdf):
+
+$f$要小
+
+$w$要短(非0的要少)*
+
+--- &vcenter .large
+
+讓我們看看一個演算法的研究方向
+
+--- &vcenter .large
+
+從牛頓法開始
+
+如果已經有模型 $w_k$，我們要找更好地點
+
+找$s$ 使得以下式子最小：
+
+$$\nabla f(w_k) ^T s + \frac{1}{2} s^T \nabla^2 f(w_k) s$$
+
+--- &vcenter .large
+
+對 $s$ 微一下
+
+$s$要滿足
+
+$$\nabla^2 f(w_k) s = - \nabla f(w_k)$$
+
+--- &vcenter .large
+
+Hessian矩陣 $\nabla^2 f(w) \in \mathbb{R}^{n \times n}$
+
+但是可以寫成
+
+$$I_n + CX^T D X$$
+
+### $X$ 是資料矩陣
+### $D$ 是對角化矩陣
+
+--- &vcenter .large
+
+可以用Conjugate Gradient的方法解
+
+$$s + C X^T D X s = - \nabla f(w_k)$$
+
+只要算 Hessian和vector的乘積 
+
+我們不需要知道Hessian就可以找$w$
+
+--- &vcenter .large
+
+矩陣和向量的乘法可以平行化!
+
+<img src="assets/img/SA2.png" class="fit100" />
+
+--- &vcenter .large
+
+理論搞懂了，要實做！
+
+把[LIBLINEAR](http://www.csie.ntu.edu.tw/~cjlin/liblinear/)和[MPI](http://en.wikipedia.org/wiki/Message_Passing_Interface)參在一起
+
+把[Matrix](http://cran.r-project.org/web/packages/Matrix/index.html)、[Rcpp](http://dirk.eddelbuettel.com/code/rcpp.html)和[pbdMPI](http://en.wikipedia.org/wiki/Programming_with_Big_Data_in_R)參在一起
+
+--- &vcenter .large
+
+[Matrix](http://cran.r-project.org/web/packages/Matrix/index.html)在重複計算Hessian太慢了
+
+要改進
+
+[Rcpp](http://dirk.eddelbuettel.com/code/rcpp.html)再度救援
+
+--- &vcenter .large
+
+辛苦寫出來，也不知道對不對
+
+有R 在手邊，馬上比較小資料的結果
+
+--- &vcenter .large
+
+我還想要更快
+
+嘗試比較其他BLAS
+
+--- &vcenter .large
+
+沒有比我們目前的快
+
+```
+nnz = 1.000000e+06, rows = 1.000000e+05, cols = 1.000000e+03, density = 1.000000e-02, times = 100, nr_threads = 1
+generating data...done 453ms
+CSR Xv:  388ms
+CSR XTv: 288ms
+CSR X^TDXv: 488ms
+CSR X^TDXv (ACC): 367ms
+CSR Xv (MKL):  468ms
+CSR XTv (MKL): 482ms
+CSR X^TDXv (MKL): 529ms
+CSR Xv (NIST):  398ms
+CSR XTv (NIST): 461ms
+error: 0.000000
 ```
 
+--- &vcenter .large
+
+終於跨過資料量的門檻了...
+
+該看看資料了！
+
+--- .dark .segue
+
+## 資料越大，結果就會越好嗎？
+
 ---
 
-## 單面像的學習
+<img src="assets/img/datasize.png" class="fit100"/>
 
-- 利用Summary Statistics來快速學習
-- 大大的勝過隨機播放
+--- .dark .segue
 
----
+## 不同的模型對預測會有影響嗎？
 
-## 多面向的學習
+--- &vcenter .large
 
+因子的組合
+
+<img src="assets/img/factors.png" class="fit100" />
+
+--- &vcenter .large
+
+實驗結果
+
+```{r exp, echo=FALSE, results='asis'}
+print(xtable(head(read.csv("exp.csv", header=TRUE), 20), digits=4), type="html")
+```
+
+--- &vcenter .large
+
+分析
+
+### 感謝R 強大的分析功能
+
+```{r result, echo=FALSE, results='asis'}
+print(xtable(read.csv("result.csv", sep="\t", check.names=FALSE), digits=4), type="html")
+```
+
+### 平均來說FeatureSet B 好 $0.5\%$
+
+--- &vcenter .large
+
+<img src="assets/img/cycle.png" class="fit100" />
+
+--- &vcenter .large
+
+成果
+
+```{r, echo=FALSE, fig.width = 14, fig.height=7}
+library(ggplot2)
+df2 <- readRDS("result.Rds")
+ggplot(df2, aes(x=date, y=ratio)) +
+  geom_line()
+```
+
+--- .dark .segue
+
+## 革命尚未成功，同志仍需努力
+
+--- &vcenter .large
+
+Online Logistic Regression
+
+### 更快
+### 更有彈性
+### 更多因子
+
+--- &vcenter .large
+
+TRON v.s. FTRL
+
+```{r, echo=FALSE, fig.width = 14, fig.height=7}
+parse <- function(path) {
+  tmp <- read.csv(path, header=FALSE, stringsAsFactors=FALSE, sep=" ")
+  tmp$V1
+}
+ftrl <- parse("../log_ftrl_tron/ftrl.4")
+tron <- parse("../log_ftrl_tron/tron.4")
+tron[which(tron == Inf)] <- NA
+plot(seq_along(ftrl), ftrl / tron, type="l", xlab="day", col=2)
+abline(h=1, lty=2)
+```
+
+--- .dark .segue
+
+## 總結
+
+--- &vcenter .large
+
+從大量的數據學出價值，我們需要
+
+### 提出問題
+### 提出模型描述問題
+### 運用工程能力實做方法
+### 分析資料
+### 評估與比較
+
+--- &vcenter .large
+
+Q&A

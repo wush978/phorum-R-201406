@@ -1,0 +1,9 @@
+4                filter(m, Sepal.Width == 3.5)          100    0.05      1.0
+5               filter(m2, Sepal.Width == 3.5)          100    0.14      2.8
+7 m[fmatch(m$Sepal.Width, 3.5, nomatch = 0), ]          100    0.25      5.0
+1                    m[m$Sepal.Width == 3.5, ]          100    0.44      8.8
+8 m2[fmatch(m2$Sepal.Width, 3.5, nomatch = 0)]          100    0.33      6.6
+3                                   m2[J(3.5)]          100    0.17      3.4
+6                                m2[list(3.5)]          100    0.14      2.8
+9                         m3[m3[, 2] == 3.5, ]          100    0.22      4.4
+2                subset(m, Sepal.Width == 3.5)          100    0.55     11.0
