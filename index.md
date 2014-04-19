@@ -50,20 +50,22 @@ logo: Taiwan-R-logo.png
 
 <img src="assets/img/cooperation.jpeg" class="fit100" </img>
 
---- &twocol
-
+--- &twocol .large
 
 *** =left
 
 ## 關於講者
 
-- 臺大電機所博士生
-- 和宇匯知識科技合作
-    - 建立廣告推薦引擎
+臺大電機所博士生
+
+和宇匯知識科技合作建立廣告推薦引擎
+
+### 今天的內容是我和Y.-C. Juan, Y. Zhuang的共同工作
 
 *** =right
 
 <img class="fit100" src="assets/img/wush.jpg"/>
+
 --- &vcenter .large
 
 不是教大家用R 處理GB/TB/PB等級的資料
@@ -381,7 +383,7 @@ object.size(mm)
 ### 使用別人寫好的高效能套件
 ### 使用parallel套件來運用CPU的多核心
 ### 使用Rcpp套件來快速開發C++程式提升效能
-### [利用OpenBLAS來加速矩陣運算](http://www.r-bloggers.com/for-faster-r-use-openblas-instead-better-than-atlas-trivial-to-switch-to-on-ubuntu/)
+### 使用更快的BLAS套件
 
 --- 
 
@@ -415,32 +417,42 @@ benchmark(f(N, 1), lf(N, 1))
 
 --- &vcenter .large
 
-OpenBLAS比較
+R's BLAS v.s. Apple's BLAS (可參考[RMacOSX-FAQ](http://r.research.att.com/man/RMacOSX-FAQ.html#Which-BLAS-is-used-and-how-can-it-be-changed_003f))
+
+<!-- html table generated in R 3.0.2 by xtable 1.7-1 package -->
+<!-- Fri Apr 18 21:20:09 2014 -->
+<TABLE border=1>
+<TR> <TH>  </TH> <TH> Operation </TH> <TH> Dimension </TH> <TH> BLAS </TH> <TH> Apple.s.BLAS </TH>  </TR>
+  <TR> <TD align="right"> 1 </TD> <TD> Creation, transp., deformation </TD> <TD> 2500x2500 </TD> <TD> 1.04 </TD> <TD> 1.05 </TD> </TR>
+  <TR> <TD align="right"> 2 </TD> <TD> normal random matrix </TD> <TD> 2400x2400 </TD> <TD> 0.17 </TD> <TD> 0.2 </TD> </TR>
+  <TR> <TD align="right"> 3 </TD> <TD> sorting </TD> <TD> 7M </TD> <TD> 0.67 </TD> <TD> 0.68 </TD> </TR>
+  <TR> <TD align="right"> 4 </TD> <TD> Cross-product </TD> <TD> 2800x2800 </TD> <TD> 11.91 </TD> <TD> <font color='red'>0.55</font> </TD> </TR>
+  <TR> <TD align="right"> 5 </TD> <TD> linear regr. </TD> <TD> 3000x3000 </TD> <TD> 5.48 </TD> <TD> <font color='red'>0.33</font> </TD> </TR>
+  <TR> <TD align="right"> 6 </TD> <TD> FFT </TD> <TD> 2.4M </TD> <TD> 0.45 </TD> <TD> 0.45 </TD> </TR>
+  <TR> <TD align="right"> 7 </TD> <TD> Eigenvalues </TD> <TD> 640x640 </TD> <TD> 0.82 </TD> <TD> 0.42 </TD> </TR>
+  <TR> <TD align="right"> 8 </TD> <TD> Determinant </TD> <TD> 2500x2500 </TD> <TD> 3.84 </TD> <TD> <font color='red'>0.45</font> </TD> </TR>
+  <TR> <TD align="right"> 9 </TD> <TD> Cholesky Decomp. </TD> <TD> 3000x3000 </TD> <TD> 4.56 </TD> <TD> <font color='red'>0.32</font> </TD> </TR>
+  <TR> <TD align="right"> 10 </TD> <TD> Inverse </TD> <TD> 1600x1600 </TD> <TD> 3.77 </TD> <TD> <font color='red'>1.25</font> </TD> </TR>
+   </TABLE>
+
 
 --- &vcenter .large
 
 Parallel & Bootstrap
 
 
-```r
-library(boot)
-f <- function(df, i) {
-    df.sampled <- df[i, ]
-    lm(dist ~ speed, df.sampled)$coef[1]
-}
-benchmark(replications = 10, boot(cars, f, R = 1000, parallel = "multicore"), 
-    boot(cars, f, R = 1000, parallel = "no"))
-```
+
 
 ```
-##                                              test replications elapsed
-## 1 boot(cars, f, R = 1000, parallel = "multicore")           10   11.04
-## 2        boot(cars, f, R = 1000, parallel = "no")           10   10.91
-##   relative user.self sys.self user.child sys.child
-## 1    1.012     10.91    0.120          0         0
-## 2    1.000     10.79    0.121          0         0
+boot(df, f, R = 100, parallel = "multicore", ncpus = 4)
+2                   boot(df, f, R = 100, parallel = "no")
+  replications elapsed relative user.self sys.self user.child
+1           20 311.831    1.000     6.388    0.560    876.979
+2           20 622.117    1.995   620.335    0.112      0.000
+  sys.child
+1      5.26
+2      0.00
 ```
-
 
 --- &vcenter .large
 
@@ -453,26 +465,6 @@ benchmark(replications = 10, boot(cars, f, R = 1000, parallel = "multicore"),
 ### 儲存成壓縮格式（把硬碟讀取時間變成CPU的時間）
 ### SSD
 ### 分散式讀取
-
---- 
-
-## 分散式讀取
-
-<!-- html table generated in R 3.0.2 by xtable 1.7-1 package -->
-<!-- Wed Apr 16 23:06:28 2014 -->
-<TABLE border=1>
-<TR> <TH>  </TH> <TH> 1台機器 </TH> <TH> 2台機器 </TH> <TH> 4台機器 </TH> <TH> 8台機器 </TH> <TH> 16台機器 </TH> <TH> 32台機器 </TH> <TH> 64台機器 </TH>  </TR>
-  <TR> <TD align="right"> 1倍資料 </TD> <TD align="right"> 2.75 </TD> <TD align="right">  </TD> <TD align="right">  </TD> <TD align="right">  </TD> <TD>  </TD> <TD align="right">  </TD> <TD align="right">  </TD> </TR>
-  <TR> <TD align="right"> 2倍資料 </TD> <TD align="right"> 5.87 </TD> <TD align="right"> 2.76 </TD> <TD align="right">  </TD> <TD align="right">  </TD> <TD>  </TD> <TD align="right">  </TD> <TD align="right">  </TD> </TR>
-  <TR> <TD align="right"> 4倍資料 </TD> <TD align="right"> 14.41 </TD> <TD align="right"> 6.57 </TD> <TD align="right"> 5.68 </TD> <TD align="right">  </TD> <TD>  </TD> <TD align="right">  </TD> <TD align="right">  </TD> </TR>
-  <TR> <TD align="right"> 8倍資料 </TD> <TD align="right"> 28.92 </TD> <TD align="right"> 14.37 </TD> <TD align="right"> 11.95 </TD> <TD align="right"> 7.48 </TD> <TD>  </TD> <TD align="right">  </TD> <TD align="right">  </TD> </TR>
-  <TR> <TD align="right"> 16倍資料 </TD> <TD align="right">  </TD> <TD align="right"> 39.66 </TD> <TD align="right"> 31.80 </TD> <TD align="right"> 17.29 </TD> <TD>  </TD> <TD align="right">  </TD> <TD align="right">  </TD> </TR>
-  <TR> <TD align="right"> 32倍資料 </TD> <TD align="right">  </TD> <TD align="right">  </TD> <TD align="right"> 55.57 </TD> <TD align="right"> 44.09 </TD> <TD>  </TD> <TD align="right"> 18.45 </TD> <TD align="right">  </TD> </TR>
-  <TR> <TD align="right"> 64倍資料 </TD> <TD align="right">  </TD> <TD align="right">  </TD> <TD align="right">  </TD> <TD align="right"> 54.06 </TD> <TD>  </TD> <TD align="right"> 23.68 </TD> <TD align="right"> 19.47 </TD> </TR>
-  <TR> <TD align="right"> 128倍資料 </TD> <TD align="right">  </TD> <TD align="right">  </TD> <TD align="right">  </TD> <TD align="right">  </TD> <TD>  </TD> <TD align="right"> 25.76 </TD> <TD align="right"> 24.82 </TD> </TR>
-  <TR> <TD align="right"> 256倍資料 </TD> <TD align="right">  </TD> <TD align="right">  </TD> <TD align="right">  </TD> <TD align="right">  </TD> <TD>  </TD> <TD align="right"> 59.60 </TD> <TD align="right"> 42.88 </TD> </TR>
-   </TABLE>
-
 
 --- &vcenter .large
 
@@ -500,6 +492,20 @@ Single Machine
 }
 ```
 
+--- &twocol
+
+*** =left
+
+## 單台機器讀取
+
+<img src="assets/img/1node.png" class="fit100" />
+
+*** =right
+
+## 多台機器讀取
+
+<img src="assets/img/nnode.png" class="fit100" />
+
 --- &vcenter .large
 
 演算法
@@ -515,15 +521,15 @@ Single Machine
 
 查詢的效能比較
 
-(取自[ptt](http://www.ptt.cc/bbs/R_Language/M.1396729914.A.B34.html))
+### (取自[ptt](http://www.ptt.cc/bbs/R_Language/M.1396729914.A.B34.html))
 
 從iris選取Sepal.Width為3.5的row
 
-### m: `data.frame`
-### m2: `data.table` with indexing
-### m3: `matrix`
+m: `data.frame`
 
-補上平台：windows 7 64 bit SP1, R 3.0.3, i7-3700K@4.3GHz
+m2: `data.table` with indexing
+
+m3: `matrix`
 
 --- &vcenter .large
 
@@ -597,7 +603,7 @@ $$P( y | x ) = \frac{1}{1 + e^{- y w^T x}}$$
 
 --- &vcenter .large
 
-有這些instances
+手上有這些資料
 
 $$(y_1, x_1), (y_2, x_2), ...(y_n, x_n)$$
 
@@ -680,6 +686,8 @@ $$s + C X^T D X s = - \nabla f(w_k)$$
 把[LIBLINEAR](http://www.csie.ntu.edu.tw/~cjlin/liblinear/)和[MPI](http://en.wikipedia.org/wiki/Message_Passing_Interface)參在一起
 
 把[Matrix](http://cran.r-project.org/web/packages/Matrix/index.html)、[Rcpp](http://dirk.eddelbuettel.com/code/rcpp.html)和[pbdMPI](http://en.wikipedia.org/wiki/Programming_with_Big_Data_in_R)參在一起
+
+可參考[pbdMPI](http://programmermagazine.github.io/201310/htm/article6.html)和[HsTrust](https://bitbucket.org/wush978/largescalelogisticregression/src/4daf9c5bba5cd0e4f35afd813866e6da72ca92bb/?at=hstrust)
 
 --- &vcenter .large
 

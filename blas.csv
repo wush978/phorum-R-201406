@@ -1,0 +1,11 @@
+Operation,Dimension,BLAS,Apple's BLAS
+"Creation, transp., deformation",2500x2500,1.04,1.05
+normal random matrix,2400x2400,0.17,0.2
+sorting,7M,0.67,0.68
+Cross-product,2800x2800,11.91,0.55
+linear regr.,3000x3000,5.48,0.33
+FFT,2.4M,0.45,0.45
+Eigenvalues,640x640,0.82,0.42
+Determinant,2500x2500,3.84,0.45
+Cholesky Decomp.,3000x3000,4.56,0.32
+Inverse,1600x1600,3.77,1.25
