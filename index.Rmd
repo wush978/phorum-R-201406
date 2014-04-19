@@ -1,6 +1,6 @@
 ---
 title       : Large Scale Learning in R
-subtitle    : 
+subtitle    : wush978.github.io/phorum-R-201406
 author      : Wush Wu
 job         : Taiwan R User Group
 framework   : io2012        # {io2012, html5slides, shower, dzslides, ...}
