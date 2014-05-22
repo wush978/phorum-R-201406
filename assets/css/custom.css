@@ -3,6 +3,10 @@ img.fit100 {
   max-height:100%;
 };
 
+img.fit50 {
+  max-width:50%;
+  max-height:50%;
+};
 /* copy from https://github.com/asimihsan/going_faster_with_python/blob/9dd25b5638ad73c0e2154024079379dc5f711d18/doc/presentation/slidify/assets/css/aicustom1.css */
 
 /*

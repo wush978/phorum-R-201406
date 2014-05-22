@@ -153,7 +153,7 @@
 
 <!-- html table generated in R 3.0.3 by xtable 1.7-3 package -->
 
-<!-- Thu May 22 21:01:35 2014 -->
+<!-- Thu May 22 21:49:11 2014 -->
 
 <TABLE border=1>
 <TR> <TH>  </TH> <TH> is_click </TH> <TH> show_time </TH> <TH> client_ip </TH> <TH> adid </TH>  </TR>
@@ -178,7 +178,7 @@
   <article data-timings="">
     <!-- html table generated in R 3.0.3 by xtable 1.7-3 package -->
 
-<!-- Thu May 22 21:01:35 2014 -->
+<!-- Thu May 22 21:49:11 2014 -->
 
 <TABLE border=1>
 <TR> <TH>  </TH> <TH> is_click </TH> <TH> show_time </TH> <TH> client_ip </TH> <TH> adid </TH>  </TR>
@@ -351,7 +351,7 @@ class(mm)
 <article class = 'flexbox vcenter'>
 <p>還可用<code>Rcpp</code>實做矩陣-向量的乘法</p>
 
-<p>我們的實作和BLAS庫比較：</p>
+<p>我們的實作(C的部分)和BLAS庫比較：</p>
 
 <pre><code>nnz = 1.000000e+06, rows = 1.000000e+05, cols = 1.000000e+03, 
 density = 1.000000e-02, times = 100, nr_threads = 1
@@ -376,11 +376,9 @@ error: 0.000000
   
 </hgroup>
 <article class = 'flexbox vcenter'>
-<p>再透過<code>pbdMPI</code>開發分散式矩陣乘法</p>
+<p>利用<code>Rcpp</code>將C的實作暴露到R中</p>
 
-<p>利用更多CPU和更多記憶體提升效能</p>
-
-<p>\[\left(\begin{array}{c}X_1 \\ X_2\end{array}\right) w = \left(\begin{array}{c}X_1 w \\ X_2 w\end{array}\right)\]</p>
+<p>利用<code>Rcpp</code>做記憶體的重複使用</p>
 
 </article>
 <!-- Presenter Notes -->
@@ -390,12 +388,26 @@ error: 0.000000
   
 </hgroup>
 <article class = 'flexbox vcenter'>
-<p><code>pbdMPI</code>是<a href="http://r-pbd.org/">pbdR(Programming with Big Data in R)</a>專案的套件之一</p>
+<p>再透過<code>pbdMPI</code>開發分散式矩陣乘法</p>
+
+<p>利用更多CPU和更多記憶體提升效能</p>
+
+<p>\[\left(\begin{array}{c}X_1 \\ X_2\end{array}\right) w = \left(\begin{array}{c}X_1 w \\ X_2 w\end{array}\right)\]</p>
 
 </article>
 <!-- Presenter Notes -->
 </slide>
 <slide class="large" id="slide-21">
+<hgroup>
+  
+</hgroup>
+<article class = 'flexbox vcenter'>
+<p><code>pbdMPI</code>是<a href="http://r-pbd.org/">pbdR(Programming with Big Data in R)</a>專案的套件之一</p>
+
+</article>
+<!-- Presenter Notes -->
+</slide>
+<slide class="large" id="slide-22">
 <hgroup>
   
 </hgroup>
@@ -418,7 +430,7 @@ finalize()
 
 </div>
 </slide>
-<slide class="large" id="slide-22">
+<slide class="large" id="slide-23">
 <hgroup>
   
 </hgroup>
@@ -437,7 +449,7 @@ finalize()
 
 </div>
 </slide>
-<slide class="large" id="slide-23">
+<slide class="large" id="slide-24">
 <hgroup>
   
 </hgroup>
@@ -451,7 +463,7 @@ finalize()
 </article>
 <!-- Presenter Notes -->
 </slide>
-<slide class="large" id="slide-24">
+<slide class="large" id="slide-25">
 <hgroup>
   <h2>LIBLINEAR 原始碼中的 <code>tron.h</code></h2>
 </hgroup>
@@ -479,7 +491,7 @@ private:
 </article>
 <!-- Presenter Notes -->
 </slide>
-<slide class="" id="slide-25">
+<slide class="" id="slide-26">
 <hgroup>
   <h2>界面：<code>function</code></h2>
 </hgroup>
@@ -505,7 +517,7 @@ public:
 </article>
 <!-- Presenter Notes -->
 </slide>
-<slide class="large" id="slide-26">
+<slide class="large" id="slide-27">
 <hgroup>
   <h2>利用<code>Rcpp Modules</code>把<code>function</code>暴露到R中</h2>
 </hgroup>
@@ -543,7 +555,7 @@ SEXP tron//...
 
 </div>
 </slide>
-<slide class="large" id="slide-27">
+<slide class="large" id="slide-28">
 <hgroup>
   
 </hgroup>
@@ -578,7 +590,7 @@ print(r &lt;- obj$tron(1e-4, TRUE))
 
 </div>
 </slide>
-<slide class="" id="slide-28">
+<slide class="" id="slide-29">
 <hgroup>
   
 </hgroup>
@@ -602,7 +614,7 @@ iter  8 act 9.416e-06 pre 7.823e-06 delta 4.186e-01 f 1.173e-05 |g| 8.019e-04 CG
 </article>
 <!-- Presenter Notes -->
 </slide>
-<slide class="large" id="slide-29">
+<slide class="large" id="slide-30">
 <hgroup>
   
 </hgroup>
@@ -627,7 +639,7 @@ hs &lt;- new(HsTrust, objective_function, ...)
 </article>
 <!-- Presenter Notes -->
 </slide>
-<slide class="large" id="slide-30">
+<slide class="large" id="slide-31">
 <hgroup>
   
 </hgroup>
@@ -648,7 +660,7 @@ hs &lt;- new(HsTrust, objective_function, ...)
 </article>
 <!-- Presenter Notes -->
 </slide>
-<slide class="large" id="slide-31">
+<slide class="large" id="slide-32">
 <hgroup>
   
 </hgroup>
@@ -660,7 +672,7 @@ hs &lt;- new(HsTrust, objective_function, ...)
 </article>
 <!-- Presenter Notes -->
 </slide>
-<slide class="dark segue" id="slide-32" style="background:;">
+<slide class="dark segue" id="slide-33" style="background:;">
   <hgroup>
     <h2>資料越大，結果就會越好嗎？</h2>
   </hgroup>
@@ -670,7 +682,7 @@ hs &lt;- new(HsTrust, objective_function, ...)
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-33" style="background:;">
+<slide class="" id="slide-34" style="background:;">
   <article data-timings="">
     <p><img src="assets/img/datasize.png" class="fit100"/></p>
 
@@ -678,7 +690,7 @@ hs &lt;- new(HsTrust, objective_function, ...)
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="dark segue" id="slide-34" style="background:;">
+<slide class="dark segue" id="slide-35" style="background:;">
   <hgroup>
     <h2>不同的模型對預測會有影響嗎？</h2>
   </hgroup>
@@ -688,7 +700,7 @@ hs &lt;- new(HsTrust, objective_function, ...)
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="large" id="slide-35">
+<slide class="large" id="slide-36">
 <hgroup>
   
 </hgroup>
@@ -700,7 +712,7 @@ hs &lt;- new(HsTrust, objective_function, ...)
 </article>
 <!-- Presenter Notes -->
 </slide>
-<slide class="large" id="slide-36">
+<slide class="large" id="slide-37">
 <hgroup>
   
 </hgroup>
@@ -709,7 +721,7 @@ hs &lt;- new(HsTrust, objective_function, ...)
 
 <!-- html table generated in R 3.0.3 by xtable 1.7-3 package -->
 
-<!-- Thu May 22 21:01:37 2014 -->
+<!-- Thu May 22 21:49:14 2014 -->
 
 <TABLE border=1>
 <TR> <TH>  </TH> <TH> auc </TH> <TH> Regularization </TH> <TH> FeatureSet </TH> <TH> DayEffect </TH>  </TR>
@@ -736,7 +748,7 @@ hs &lt;- new(HsTrust, objective_function, ...)
 </article>
 <!-- Presenter Notes -->
 </slide>
-<slide class="large" id="slide-37">
+<slide class="large" id="slide-38">
 <hgroup>
   
 </hgroup>
@@ -747,7 +759,7 @@ hs &lt;- new(HsTrust, objective_function, ...)
 
 <!-- html table generated in R 3.0.3 by xtable 1.7-3 package -->
 
-<!-- Thu May 22 21:01:37 2014 -->
+<!-- Thu May 22 21:49:14 2014 -->
 
 <TABLE border=1>
 <TR> <TH>  </TH> <TH> row.names  Estimate </TH> <TH> Std. Error </TH> <TH> t value </TH> <TH> Pr(&gt;|t|) </TH>  </TR>
@@ -764,7 +776,7 @@ hs &lt;- new(HsTrust, objective_function, ...)
 </article>
 <!-- Presenter Notes -->
 </slide>
-<slide class="large" id="slide-38">
+<slide class="large" id="slide-39">
 <hgroup>
   
 </hgroup>
@@ -774,7 +786,7 @@ hs &lt;- new(HsTrust, objective_function, ...)
 </article>
 <!-- Presenter Notes -->
 </slide>
-<slide class="large" id="slide-39">
+<slide class="large" id="slide-40">
 <hgroup>
   
 </hgroup>
@@ -782,6 +794,103 @@ hs &lt;- new(HsTrust, objective_function, ...)
 <p>成果</p>
 
 <div class="rimage center"><img src="assets/fig/unnamed-chunk-7.png" title="plot of chunk unnamed-chunk-7" alt="plot of chunk unnamed-chunk-7" class="plot" /></div>
+
+</article>
+<!-- Presenter Notes -->
+</slide>
+<slide class="dark segue" id="slide-41" style="background:;">
+  <hgroup>
+    <h2>其他的工程面分享</h2>
+  </hgroup>
+  <article data-timings="">
+    <h3>處理大量數據需要很多工程</h3>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="large" id="slide-42">
+<hgroup>
+  
+</hgroup>
+<article class = 'flexbox vcenter'>
+<p>R Packages + Git + Jenkins:</p>
+
+<p>開發後自動測試、部署和版本控制</p>
+
+<p><img src="assets/img/jenkins.png" class="fit50"/></p>
+
+</article>
+<!-- Presenter Notes -->
+</slide>
+<slide class="large" id="slide-43">
+<hgroup>
+  
+</hgroup>
+<article class = 'flexbox vcenter'>
+<p>利用Spark做Data Cleaning</p>
+
+<p><img src="assets/img/Spark.png" class="fit50"/></p>
+
+</article>
+<!-- Presenter Notes -->
+</slide>
+<slide class="large" id="slide-44">
+<hgroup>
+  
+</hgroup>
+<article class = 'flexbox vcenter'>
+<p>R + <a href="">rjson</a> + <a href="https://aws.amazon.com/cn/cli/">awscli</a></p>
+
+<p>自動利用AWS建立雲端實驗用Cluster</p>
+
+<pre><code class="r">ec2_request_spot_instances &lt;- function(spot_price, instance_count, launch_specification = list()) {
+  write(toJSON(launch_specification), file=(json.path &lt;- tempfile()))
+  cmd &lt;- sprintf(&quot;aws ec2 request-spot-instances --spot-price %f --instance-count %d --launch-specification %s&quot;, spot_price, instance_count, sprintf(&quot;file://%s&quot;, json.path))
+  system_collapse(cmd)
+}
+</code></pre>
+
+</article>
+<!-- Presenter Notes -->
+</slide>
+<slide class="" id="slide-45">
+<hgroup>
+  <h2>總結</h2>
+</hgroup>
+<article class = 'flexbox vcenter'>
+<p>R 是可以對大量數據進行處理：</p>
+
+<ul>
+<li>使用<code>Matrix</code>套件的稀疏矩陣</li>
+<li><code>Rcpp</code>高效能的使用記憶體</li>
+<li><code>Rcpp</code>整合第三方的庫</li>
+<li><code>pbdMPI</code>建立分散式平行運算叢集</li>
+</ul>
+
+</article>
+<!-- Presenter Notes -->
+</slide>
+<slide class="large" id="slide-46">
+<hgroup>
+  
+</hgroup>
+<article class = 'flexbox vcenter'>
+<p>關於今天分享的工作</p>
+
+<p>感謝兩位同學Y.-C. Juan, Y. Zhuang</p>
+
+<p>和我在Bridgewell Inc.的合作</p>
+
+</article>
+<!-- Presenter Notes -->
+</slide>
+<slide class="" id="slide-47">
+<hgroup>
+  
+</hgroup>
+<article class = 'flexbox vcenter'>
+<p>Q&amp;A</p>
 
 </article>
 <!-- Presenter Notes -->
@@ -930,25 +1039,25 @@ hs &lt;- new(HsTrust, objective_function, ...)
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=24 title='LIBLINEAR 原始碼中的 <code>tron.h</code>'>
+        data-slide=24 title=''>
          24
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=25 title='界面：<code>function</code>'>
+        data-slide=25 title='LIBLINEAR 原始碼中的 <code>tron.h</code>'>
          25
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=26 title='利用<code>Rcpp Modules</code>把<code>function</code>暴露到R中'>
+        data-slide=26 title='界面：<code>function</code>'>
          26
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=27 title=''>
+        data-slide=27 title='利用<code>Rcpp Modules</code>把<code>function</code>暴露到R中'>
          27
       </a>
     </li>
@@ -978,25 +1087,25 @@ hs &lt;- new(HsTrust, objective_function, ...)
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=32 title='資料越大，結果就會越好嗎？'>
+        data-slide=32 title=''>
          32
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=33 title=''>
+        data-slide=33 title='資料越大，結果就會越好嗎？'>
          33
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=34 title='不同的模型對預測會有影響嗎？'>
+        data-slide=34 title=''>
          34
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=35 title=''>
+        data-slide=35 title='不同的模型對預測會有影響嗎？'>
          35
       </a>
     </li>
@@ -1022,6 +1131,54 @@ hs &lt;- new(HsTrust, objective_function, ...)
       <a href="#" target="_self" rel='tooltip' 
         data-slide=39 title=''>
          39
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=40 title=''>
+         40
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=41 title='其他的工程面分享'>
+         41
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=42 title=''>
+         42
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=43 title=''>
+         43
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=44 title=''>
+         44
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=45 title='總結'>
+         45
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=46 title=''>
+         46
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=47 title=''>
+         47
       </a>
     </li>
   </ul>

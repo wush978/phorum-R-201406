@@ -184,7 +184,7 @@ object.size(mm)
 
 還可用`Rcpp`實做矩陣-向量的乘法
 
-我們的實作和BLAS庫比較：
+我們的實作(C的部分)和BLAS庫比較：
 
 ```
 nnz = 1.000000e+06, rows = 1.000000e+05, cols = 1.000000e+03, 
@@ -201,6 +201,12 @@ CSR Xv (NIST):  398ms
 CSR XTv (NIST): 461ms
 error: 0.000000
 ```
+
+--- &vcenter .large
+
+利用`Rcpp`將C的實作暴露到R中
+
+利用`Rcpp`做記憶體的重複使用
 
 --- &vcenter .large
 
@@ -497,7 +503,57 @@ ggplot(df2, aes(x=date, y=ratio)) +
 
 --- .dark .segue
 
-## 其他和的工程面
+## 其他的工程面分享
+
+### 處理大量數據需要很多工程
 
 --- &vcenter .large
 
+R Packages + Git + Jenkins:
+
+開發後自動測試、部署和版本控制
+
+<img src="assets/img/jenkins.png" class="fit50"/>
+
+--- &vcenter .large
+
+利用Spark做Data Cleaning
+
+<img src="assets/img/Spark.png" class="fit50"/>
+
+--- &vcenter .large
+
+R + [rjson]() + [awscli](https://aws.amazon.com/cn/cli/)
+
+自動利用AWS建立雲端實驗用Cluster
+
+```{r, eval=FALSE, echo=TRUE}
+ec2_request_spot_instances <- function(spot_price, instance_count, launch_specification = list()) {
+  write(toJSON(launch_specification), file=(json.path <- tempfile()))
+  cmd <- sprintf("aws ec2 request-spot-instances --spot-price %f --instance-count %d --launch-specification %s", spot_price, instance_count, sprintf("file://%s", json.path))
+  system_collapse(cmd)
+}
+```
+
+--- &vcenter
+
+## 總結
+
+R 是可以對大量數據進行處理：
+
+- 使用`Matrix`套件的稀疏矩陣
+- `Rcpp`高效能的使用記憶體
+- `Rcpp`整合第三方的庫
+- `pbdMPI`建立分散式平行運算叢集
+
+--- &vcenter .large
+
+關於今天分享的工作
+
+感謝兩位同學Y.-C. Juan, Y. Zhuang
+
+和我在Bridgewell Inc.的合作
+
+--- &vcenter
+
+Q&A

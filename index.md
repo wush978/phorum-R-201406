@@ -66,7 +66,7 @@ R 是可以處理大量的數據
 今天從這樣的數據開始
 
 <!-- html table generated in R 3.0.3 by xtable 1.7-3 package -->
-<!-- Thu May 22 21:01:35 2014 -->
+<!-- Thu May 22 21:49:11 2014 -->
 <TABLE border=1>
 <TR> <TH>  </TH> <TH> is_click </TH> <TH> show_time </TH> <TH> client_ip </TH> <TH> adid </TH>  </TR>
   <TR> <TD align="right"> 1 </TD> <TD> FALSE </TD> <TD> 2014/05/17 04:06:52 </TD> <TD> 114.44.x.x </TD> <TD> 133594 </TD> </TR>
@@ -85,7 +85,7 @@ R 是可以處理大量的數據
 ## 問題的建模
 
 <!-- html table generated in R 3.0.3 by xtable 1.7-3 package -->
-<!-- Thu May 22 21:01:35 2014 -->
+<!-- Thu May 22 21:49:11 2014 -->
 <TABLE border=1>
 <TR> <TH>  </TH> <TH> is_click </TH> <TH> show_time </TH> <TH> client_ip </TH> <TH> adid </TH>  </TR>
   <TR> <TD align="right"> 1 </TD> <TD> FALSE </TD> <TD> 2014/05/17 04:06:52 </TD> <TD> 114.44.x.x </TD> <TD> 133594 </TD> </TR>
@@ -213,7 +213,7 @@ object.size(mm)
 
 還可用`Rcpp`實做矩陣-向量的乘法
 
-我們的實作和BLAS庫比較：
+我們的實作(C的部分)和BLAS庫比較：
 
 ```
 nnz = 1.000000e+06, rows = 1.000000e+05, cols = 1.000000e+03, 
@@ -230,6 +230,12 @@ CSR Xv (NIST):  398ms
 CSR XTv (NIST): 461ms
 error: 0.000000
 ```
+
+--- &vcenter .large
+
+利用`Rcpp`將C的實作暴露到R中
+
+利用`Rcpp`做記憶體的重複使用
 
 --- &vcenter .large
 
@@ -511,7 +517,7 @@ objective_function <- function(w) {
 實驗結果
 
 <!-- html table generated in R 3.0.3 by xtable 1.7-3 package -->
-<!-- Thu May 22 21:01:37 2014 -->
+<!-- Thu May 22 21:49:14 2014 -->
 <TABLE border=1>
 <TR> <TH>  </TH> <TH> auc </TH> <TH> Regularization </TH> <TH> FeatureSet </TH> <TH> DayEffect </TH>  </TR>
   <TR> <TD align="right"> 1 </TD> <TD align="right"> 1.0394 </TD> <TD align="right">     1 </TD> <TD> A </TD> <TD> 09:00:00 </TD> </TR>
@@ -542,7 +548,7 @@ objective_function <- function(w) {
 ### 感謝R 強大的分析功能
 
 <!-- html table generated in R 3.0.3 by xtable 1.7-3 package -->
-<!-- Thu May 22 21:01:37 2014 -->
+<!-- Thu May 22 21:49:14 2014 -->
 <TABLE border=1>
 <TR> <TH>  </TH> <TH> row.names  Estimate </TH> <TH> Std. Error </TH> <TH> t value </TH> <TH> Pr(&gt;|t|) </TH>  </TR>
   <TR> <TD align="right"> (Intercept) </TD> <TD align="right"> 1.0343 </TD> <TD align="right"> 0.0009 </TD> <TD align="right"> 1165.2725 </TD> <TD align="right"> 0.0000 </TD> </TR>
@@ -566,3 +572,62 @@ objective_function <- function(w) {
 
 <div class="rimage center"><img src="assets/fig/unnamed-chunk-7.png" title="plot of chunk unnamed-chunk-7" alt="plot of chunk unnamed-chunk-7" class="plot" /></div>
 
+
+--- .dark .segue
+
+## 其他的工程面分享
+
+### 處理大量數據需要很多工程
+
+--- &vcenter .large
+
+R Packages + Git + Jenkins:
+
+開發後自動測試、部署和版本控制
+
+<img src="assets/img/jenkins.png" class="fit50"/>
+
+--- &vcenter .large
+
+利用Spark做Data Cleaning
+
+<img src="assets/img/Spark.png" class="fit50"/>
+
+--- &vcenter .large
+
+R + [rjson]() + [awscli](https://aws.amazon.com/cn/cli/)
+
+自動利用AWS建立雲端實驗用Cluster
+
+
+```r
+ec2_request_spot_instances <- function(spot_price, instance_count, launch_specification = list()) {
+  write(toJSON(launch_specification), file=(json.path <- tempfile()))
+  cmd <- sprintf("aws ec2 request-spot-instances --spot-price %f --instance-count %d --launch-specification %s", spot_price, instance_count, sprintf("file://%s", json.path))
+  system_collapse(cmd)
+}
+```
+
+
+--- &vcenter
+
+## 總結
+
+R 是可以對大量數據進行處理：
+
+- 使用`Matrix`套件的稀疏矩陣
+- `Rcpp`高效能的使用記憶體
+- `Rcpp`整合第三方的庫
+- `pbdMPI`建立分散式平行運算叢集
+
+--- &vcenter .large
+
+關於今天分享的工作
+
+感謝兩位同學Y.-C. Juan, Y. Zhuang
+
+和我在Bridgewell Inc.的合作
+
+--- &vcenter
+
+Q&A
