@@ -37,7 +37,7 @@
   </aside>
   <hgroup class="auto-fadein">
     <h1>Large Scale Learning in R</h1>
-    <h2>wush978.github.io/phorum-R-201406</h2>
+    <h2></h2>
     <p>Wush Wu<br/>Taiwan R User Group</p>
   </hgroup>
   <article></article>  
@@ -52,59 +52,12 @@
     <!-- SLIDES -->
     <slide class="quote segue nobackground dark" id="slide-1" style="background:;">
   <article data-timings="">
-    <p><q><span class = 'white'>巨量資料<br/>掀起生活、工作和思考方式的革新</span></q></p>
-
+    
   </article>
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="large" id="slide-2">
-<hgroup>
-  
-</hgroup>
-<article class = 'flexbox vcenter'>
-<p>巨量資料很熱</p>
-
-</article>
-<!-- Presenter Notes -->
-</slide>
-<slide class="large" id="slide-3">
-<hgroup>
-  
-</hgroup>
-<article class = 'flexbox vcenter'>
-<p>為了發揮資料的價值，我們要向資料學習</p>
-
-<h3>大資料不重要，大價值才重要</h3>
-
-</article>
-<!-- Presenter Notes -->
-</slide>
-<slide class="large" id="slide-4">
-<hgroup>
-  
-</hgroup>
-<article class = 'flexbox vcenter'>
-<p>但是資料太多，學習時就遇到困難</p>
-
-</article>
-<!-- Presenter Notes -->
-</slide>
-<slide class="large" id="slide-5">
-<hgroup>
-  
-</hgroup>
-<article class = 'flexbox vcenter'>
-<p>挖資訊，變得很慢</p>
-
-<h3>畫張圖給老闆就花了我一整天了</h3>
-
-<h3>請不要忘記「抽樣」這招，但是怎麼抽？</h3>
-
-</article>
-<!-- Presenter Notes -->
-</slide>
-<slide class="dark segue quote" id="slide-6" style="background:;">
+<slide class="dark segue quote" id="slide-2" style="background:;">
   <hgroup>
     <h2>Large Scale Learning in R</h2>
   </hgroup>
@@ -114,35 +67,137 @@
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="large" id="slide-7">
+<slide class="large" id="slide-3">
 <hgroup>
   
 </hgroup>
 <article class = 'flexbox vcenter'>
-<p>今天，希望能分享跨過門檻的經驗</p>
-
-<p>和所有目前用R 遇到資料太大的同好分享</p>
-
-<p><img src="assets/img/cooperation.jpeg" class="fit100" </img></p>
+<p>很多人都在詬病R 無法處理大量的數據</p>
 
 </article>
 <!-- Presenter Notes -->
 </slide>
-<slide class="large" id="slide-8" style="background:;">
+<slide class="large" id="slide-4">
+<hgroup>
+  
+</hgroup>
+<article class = 'flexbox vcenter'>
+<p>但是只要用對R 的包</p>
+
+<p>R 是可以處理大量的數據</p>
+
+</article>
+<!-- Presenter Notes -->
+</slide>
+<slide class="large" id="slide-5">
+<hgroup>
+  
+</hgroup>
+<article class = 'flexbox vcenter'>
+<p>今天我想跟大家分享</p>
+
+<p>運用R 建立商用推薦引擎的心得</p>
+
+<p>主要是靠著<code>Rcpp</code>和<code>pbdMPI</code>等包</p>
+
+<p>打造可扩放性的學習模組</p>
+
+</article>
+<!-- Presenter Notes -->
+</slide>
+<slide class="large" id="slide-6">
+<hgroup>
+  
+</hgroup>
+<article class = 'flexbox vcenter'>
+<p>實際的數據和課本上的數據是不一樣的</p>
+
+</article>
+<!-- Presenter Notes -->
+</slide>
+<slide class="" id="slide-7">
+<hgroup>
+  
+</hgroup>
+<div style='float:left;width:48%;' class='flexbox vcenter'>
+  <h2>實際的數據</h2>
+
+<ul>
+<li>亂、充滿錯誤</li>
+<li>不停的變動</li>
+<li>不知道怎樣才算好
+
+<ul>
+<li>只能不斷精益求精</li>
+</ul></li>
+</ul>
+
+</div>
+<div style='float:right;width:48%;' class='flexbox vcenter'>
+  <h2>課本的數據</h2>
+
+<ul>
+<li>乾淨</li>
+<li>靜止</li>
+<li>需要複雜的演算法</li>
+</ul>
+
+</div>
+</slide>
+<slide class="large" id="slide-8">
+<hgroup>
+  
+</hgroup>
+<article class = 'flexbox vcenter'>
+<p>今天從這樣的數據開始</p>
+
+<!-- html table generated in R 3.0.3 by xtable 1.7-3 package -->
+
+<!-- Thu May 22 21:01:35 2014 -->
+
+<TABLE border=1>
+<TR> <TH>  </TH> <TH> is_click </TH> <TH> show_time </TH> <TH> client_ip </TH> <TH> adid </TH>  </TR>
+  <TR> <TD align="right"> 1 </TD> <TD> FALSE </TD> <TD> 2014/05/17 04:06:52 </TD> <TD> 114.44.x.x </TD> <TD> 133594 </TD> </TR>
+  <TR> <TD align="right"> 2 </TD> <TD> FALSE </TD> <TD> 2014/05/17 04:04:48 </TD> <TD> 1.162.x.x </TD> <TD> 134811 </TD> </TR>
+  <TR> <TD align="right"> 3 </TD> <TD> FALSE </TD> <TD> 2014/05/17 04:03:05 </TD> <TD> 101.13.x.x </TD> <TD> 131990 </TD> </TR>
+  <TR> <TD align="right"> 4 </TD> <TD> FALSE </TD> <TD> 2014/05/17 04:05:04 </TD> <TD> 24.84.x.x </TD> <TD> 134689 </TD> </TR>
+  <TR> <TD align="right"> 5 </TD> <TD> FALSE </TD> <TD> 2014/05/17 04:03:26 </TD> <TD> 140.109.x.x </TD> <TD> 126437 </TD> </TR>
+  <TR> <TD align="right"> 6 </TD> <TD> FALSE </TD> <TD> 2014/05/17 04:04:28 </TD> <TD> 61.231.x.x </TD> <TD> 131389 </TD> </TR>
+   </TABLE>
+
+<p><br/>
+以「預測點擊發生的機率」為例</p>
+
+</article>
+<!-- Presenter Notes -->
+</slide>
+<slide class="large" id="slide-9" style="background:;">
+  <hgroup>
+    <h2>問題的建模</h2>
+  </hgroup>
   <article data-timings="">
-    
+    <!-- html table generated in R 3.0.3 by xtable 1.7-3 package -->
+
+<!-- Thu May 22 21:01:35 2014 -->
+
+<TABLE border=1>
+<TR> <TH>  </TH> <TH> is_click </TH> <TH> show_time </TH> <TH> client_ip </TH> <TH> adid </TH>  </TR>
+  <TR> <TD align="right"> 1 </TD> <TD> FALSE </TD> <TD> 2014/05/17 04:06:52 </TD> <TD> 114.44.x.x </TD> <TD> 133594 </TD> </TR>
+  <TR> <TD align="right"> 2 </TD> <TD> FALSE </TD> <TD> 2014/05/17 04:04:48 </TD> <TD> 1.162.x.x </TD> <TD> 134811 </TD> </TR>
+  <TR> <TD align="right"> 3 </TD> <TD> FALSE </TD> <TD> 2014/05/17 04:03:05 </TD> <TD> 101.13.x.x </TD> <TD> 131990 </TD> </TR>
+  <TR> <TD align="right"> 4 </TD> <TD> FALSE </TD> <TD> 2014/05/17 04:05:04 </TD> <TD> 24.84.x.x </TD> <TD> 134689 </TD> </TR>
+  <TR> <TD align="right"> 5 </TD> <TD> FALSE </TD> <TD> 2014/05/17 04:03:26 </TD> <TD> 140.109.x.x </TD> <TD> 126437 </TD> </TR>
+  <TR> <TD align="right"> 6 </TD> <TD> FALSE </TD> <TD> 2014/05/17 04:04:28 </TD> <TD> 61.231.x.x </TD> <TD> 131389 </TD> </TR>
+   </TABLE>
+
+<h2>$$\Downarrow$$</h2>
+
+<h2>$$P(y|x) = \frac{1}{1 + e^{-yw^Tx}}$$</h2>
+
 <div style='float:left;width:48%;'>
-<h2>關於講者</h2>
-
-<p>臺大電機所博士生</p>
-
-<p>和宇匯知識科技合作建立廣告推薦引擎</p>
-
-<h3>今天的內容是我和Y.-C. Juan, Y. Zhuang的共同工作</h3>
 
 </div>
   <div style='float:right;width:48%;'>
-<p><img class="fit100" src="assets/img/wush.jpg"/></p>
 
 </div>
   
@@ -150,26 +205,12 @@
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="large" id="slide-9">
-<hgroup>
-  
-</hgroup>
-<article class = 'flexbox vcenter'>
-<p>不是教大家用R 處理GB/TB/PB等級的資料</p>
-
-<h3>多大的資料才算大資料？</h3>
-
-</article>
-<!-- Presenter Notes -->
-</slide>
 <slide class="large" id="slide-10">
 <hgroup>
   
 </hgroup>
 <article class = 'flexbox vcenter'>
-<p>只要當你「覺得」，R 處理資料太慢了</p>
-
-<p>希望能在這次演講中學到解決的方法</p>
+<p>\[w^Tx\]</p>
 
 </article>
 <!-- Presenter Notes -->
@@ -179,15 +220,19 @@
   
 </hgroup>
 <article class = 'flexbox vcenter'>
-<p>找出慢的理由</p>
+<p>iris</p>
 
-<h3>記憶體不夠了</h3>
+<pre><code class="r">head(model.matrix(Species ~ ., iris))
+</code></pre>
 
-<h3>迴圈的效能太差了</h3>
-
-<h3>資料讀取的太慢了</h3>
-
-<h3>演算法的時間複雜度太差了</h3>
+<pre><code>  (Intercept) Sepal.Length Sepal.Width Petal.Length Petal.Width
+1           1          5.1         3.5          1.4         0.2
+2           1          4.9         3.0          1.4         0.2
+3           1          4.7         3.2          1.3         0.2
+4           1          4.6         3.1          1.5         0.2
+5           1          5.0         3.6          1.4         0.2
+6           1          5.4         3.9          1.7         0.4
+</code></pre>
 
 </article>
 <!-- Presenter Notes -->
@@ -197,11 +242,13 @@
   
 </hgroup>
 <article class = 'flexbox vcenter'>
-<p>找出慢的理由</p>
+<p>實際的資料</p>
 
-<p>整體測試</p>
+<p>有 \(10^{9+}\) 筆資料</p>
 
-<p><code>Rprof</code></p>
+<p>有 \(10^{3+}\) 筆廣告</p>
+
+<p>每種類別變數可能到 \(10^{3}\) 類別</p>
 
 </article>
 <!-- Presenter Notes -->
@@ -211,126 +258,88 @@
   
 </hgroup>
 <article class = 'flexbox vcenter'>
-<p><code>Rprof</code>示範(參考<a href="http://stackoverflow.com/questions/3650862/how-to-efficiently-use-rprof-in-r">stackoverflow</a>)</p>
+<p><code>model.matrix</code>的後果：</p>
+
+<p>至少需要 \(10^9 \times (10^3...)\) 個位元</p>
+
+<p>也就是 \(116.415\) GB的記憶體</p>
 
 </article>
 <!-- Presenter Notes -->
 </slide>
-<slide class="" id="slide-14" style="background:;">
-  <article data-timings="">
-    
-<div style='float:left;width:48%;'>
-<h3>一個大data.frame</h3>
-
-<pre><code class="r">n &lt;- 1000
-x &lt;- data.frame(group = 
-    sample(letters[1:4], 
-    n, replace=TRUE), 
-  condition = 
-    sample(LETTERS[1:10], n, 
-           replace = TRUE), 
-  data = rnorm(n))
-</code></pre>
-
-<h3>合理的算法</h3>
-
-<pre><code class="r">marginal.means.1 &lt;- aggregate(
-  data ~ group + condition, 
-  data = x, FUN=mean)
-</code></pre>
-
-</div>
-  <div style='float:right;width:48%;'>
-<h3>不合理的算法</h3>
-
-<pre><code class="r">marginal.means.2 &lt;- 
-  marginal.means.1[NULL,]
-
-row.counter &lt;- 1
-for (condition in levels(x$condition)) {
-  for (group in levels(x$group)) {  
-    # 省略掉...
-  }
-}
-</code></pre>
-
-<h3>使用Rprof</h3>
-
-<pre><code class="r">Rprof(&quot;profile1.out&quot;, line.profiling=TRUE)
-eval(parse(file = 
-  &quot;http://pastebin.com/download.php?i=KjdkSVZq&quot;, 
-  keep.source=TRUE))
-Rprof(NULL)
-</code></pre>
-
-</div>
-  
-  </article>
-  <!-- Presenter Notes -->
-</slide>
-
-<slide class="" id="slide-15" style="background:;">
-  <hgroup>
-    <h3>解讀<code>profile1.out</code></h3>
-  </hgroup>
-  <article data-timings="">
-    <pre><code class="r">summaryRprof(&quot;profile1.out&quot;, lines = &quot;show&quot;)$by.self
-</code></pre>
-
-<!-- html table generated in R 3.0.2 by xtable 1.7-1 package -->
-
-<!-- Wed Apr 16 23:02:12 2014 -->
-
-<TABLE border=1>
-<TR> <TH>  </TH> <TH> self.time </TH> <TH> self.pct </TH> <TH> total.time </TH> <TH> total.pct </TH>  </TR>
-  <TR> <TD align="right"> download.php?i=KjdkSVZq#17 </TD> <TD align="right"> 4.48 </TD> <TD align="right"> 96.97 </TD> <TD align="right"> 4.48 </TD> <TD align="right"> 96.97 </TD> </TR>
-  <TR> <TD align="right"> download.php?i=KjdkSVZq#16 </TD> <TD align="right"> 0.06 </TD> <TD align="right"> 1.30 </TD> <TD align="right"> 0.06 </TD> <TD align="right"> 1.30 </TD> </TR>
-  <TR> <TD align="right"> download.php?i=KjdkSVZq#6 </TD> <TD align="right"> 0.04 </TD> <TD align="right"> 0.87 </TD> <TD align="right"> 0.04 </TD> <TD align="right"> 0.87 </TD> </TR>
-  <TR> <TD align="right"> &lt no location&gt  </TD> <TD align="right"> 0.02 </TD> <TD align="right"> 0.43 </TD> <TD align="right"> 0.02 </TD> <TD align="right"> 0.43 </TD> </TR>
-  <TR> <TD align="right"> download.php?i=KjdkSVZq#3 </TD> <TD align="right"> 0.02 </TD> <TD align="right"> 0.43 </TD> <TD align="right"> 0.02 </TD> <TD align="right"> 0.43 </TD> </TR>
-   </TABLE>
-
-  </article>
-  <!-- Presenter Notes -->
-</slide>
-
-<slide class="" id="slide-16" style="background:;">
-  <hgroup>
-    <h2>怎麼知道記憶體不夠了？</h2>
-  </hgroup>
-  <article data-timings="">
-    <h3>查詢物件的記憶體用量</h3>
-
-<pre><code class="r">object.size(iris)
-</code></pre>
-
-<pre><code>## 7088 bytes
-</code></pre>
-
-<h3>利用作業系統的工具查R 的記憶體用量</h3>
-
-<ul>
-<li>Windows : Ctrl + Alt + Delete</li>
-<li>Linux : htop</li>
-</ul>
-
-<div style='float:left;width:48%;'>
-
-</div>
-  <div style='float:right;width:48%;'>
-
-</div>
-  
-  </article>
-  <!-- Presenter Notes -->
-</slide>
-
-<slide class="" id="slide-17">
+<slide class="large" id="slide-14">
 <hgroup>
   
 </hgroup>
 <article class = 'flexbox vcenter'>
-<p><img src="assets/img/Windows.png" class="fit100"/></p>
+<p>開始抱怨了!</p>
+
+<h3>R 不能處理大量的數據</h3>
+
+<h3>R 會吃很多記憶體</h3>
+
+<h3>使用R 跑不動，使用其他工具就跑得動</h3>
+
+</article>
+<!-- Presenter Notes -->
+</slide>
+<slide class="large" id="slide-15">
+<hgroup>
+  
+</hgroup>
+<article class = 'flexbox vcenter'>
+<p>請使用和其他工具一樣的資料結構:</p>
+
+<p>這種狀況，應該使用稀疏矩阵</p>
+
+</article>
+<!-- Presenter Notes -->
+</slide>
+<slide class="" id="slide-16">
+<hgroup>
+  
+</hgroup>
+<div style='float:left;width:48%;' class='flexbox vcenter'>
+  <pre><code class="r">library(Matrix); data(KNex)
+class(KNex$mm)[1]
+</code></pre>
+
+<pre><code>[1] &quot;dgCMatrix&quot;
+</code></pre>
+
+<pre><code class="r">object.size(KNex$mm)
+</code></pre>
+
+<pre><code>109336 bytes
+</code></pre>
+
+</div>
+<div style='float:right;width:48%;' class='flexbox vcenter'>
+  <pre><code class="r">mm &lt;- as(KNex$mm, &quot;matrix&quot;)
+class(mm)
+</code></pre>
+
+<pre><code>[1] &quot;matrix&quot;
+</code></pre>
+
+<pre><code class="r">object.size(mm)
+</code></pre>
+
+<pre><code>10537968 bytes
+</code></pre>
+
+</div>
+</slide>
+<slide class="large" id="slide-17">
+<hgroup>
+  
+</hgroup>
+<article class = 'flexbox vcenter'>
+<p>在我手上的資料上</p>
+
+<p>大概可以省下 \(10^2 \sim 10^3\) 倍記憶體</p>
+
+<p><code>並且可以大幅加快運算效能</code></p>
 
 </article>
 <!-- Presenter Notes -->
@@ -340,729 +349,12 @@ Rprof(NULL)
   
 </hgroup>
 <article class = 'flexbox vcenter'>
-<p>物件的複製</p>
+<p>還可用<code>Rcpp</code>實做矩陣-向量的乘法</p>
 
-<p>Copy On Write</p>
+<p>我們的實作和BLAS庫比較：</p>
 
-<p><img src="assets/img/CopyOnWrite.png" alt=""></p>
-
-</article>
-<!-- Presenter Notes -->
-</slide>
-<slide class="large" id="slide-19">
-<hgroup>
-  
-</hgroup>
-<article class = 'flexbox vcenter'>
-<p>利用<code>tracemem</code>指令可以追蹤物件的複製</p>
-
-</article>
-<!-- Presenter Notes -->
-</slide>
-<slide class="" id="slide-20" style="background:;">
-  <hgroup>
-    <h2><code>data.table</code>、<code>tracemem</code>使用範例</h2>
-  </hgroup>
-  <article data-timings="">
-    
-<div style='float:left;width:48%;'>
-<pre><code class="r">library(data.table)
-data(mtcars)
-tracemem(mtcars)
-</code></pre>
-
-<pre><code>## [1] &quot;&lt;0x106c4a408&gt;&quot;
-</code></pre>
-
-<pre><code class="r">set(mtcars, j = &quot;mpg&quot;, value = NULL)
-</code></pre>
-
-</div>
-  <div style='float:right;width:48%;'>
-<pre><code class="r">tracemem(mtcars)
-</code></pre>
-
-<pre><code>## [1] &quot;&lt;0x106c4a408&gt;&quot;
-</code></pre>
-
-<pre><code class="r">mtcars[, &quot;mpg&quot;] &lt;- NULL
-</code></pre>
-
-<pre><code>## tracemem[0x106c4a408 -&gt; 0x106c8c4b0]: eval eval withVisible withCallingHandlers doTryCatch tryCatchOne tryCatchList tryCatch try handle evaluate_call evaluate in_dir block_exec call_block process_group.block process_group withCallingHandlers process_file knit ifelse force in_dir parse_page slidify 
-## tracemem[0x106c8c4b0 -&gt; 0x106faaa00]: [&lt;-.data.frame [&lt;- eval eval withVisible withCallingHandlers doTryCatch tryCatchOne tryCatchList tryCatch try handle evaluate_call evaluate in_dir block_exec call_block process_group.block process_group withCallingHandlers process_file knit ifelse force in_dir parse_page slidify
-</code></pre>
-
-</div>
-  
-  </article>
-  <!-- Presenter Notes -->
-</slide>
-
-<slide class="" id="slide-21" style="background:;">
-  <hgroup>
-    <h2>Rcpp的Modify In Place範例</h2>
-  </hgroup>
-  <article data-timings="">
-    
-<div style='float:left;width:48%;'>
-<pre><code class="cpp">#include &lt;Rcpp.h&gt;
-
-using namespace Rcpp;
-
-//[[Rcpp::export]] 
-SEXP fill(NumericVector v, double value) {
-  v.fill(value);
-  return v;
-} 
-</code></pre>
-
-</div>
-  <div style='float:right;width:48%;'>
-<pre><code class="r">a &lt;- numeric(100)
-tracemem(a)
-</code></pre>
-
-<pre><code>## [1] &quot;&lt;0x107401170&gt;&quot;
-</code></pre>
-
-<pre><code class="r">invisible(fill(a, 1))
-head(a)
-</code></pre>
-
-<pre><code>## [1] 1 1 1 1 1 1
-</code></pre>
-
-<pre><code class="r">a[] &lt;- 2
-</code></pre>
-
-<pre><code>## tracemem[0x107401170 -&gt; 0x10733eaa0]: eval eval withVisible withCallingHandlers doTryCatch tryCatchOne tryCatchList tryCatch try handle evaluate_call evaluate in_dir block_exec call_block process_group.block process_group withCallingHandlers process_file knit ifelse force in_dir parse_page slidify
-</code></pre>
-
-<pre><code class="r">head(a)
-</code></pre>
-
-<pre><code>## [1] 2 2 2 2 2 2
-</code></pre>
-
-</div>
-  
-  </article>
-  <!-- Presenter Notes -->
-</slide>
-
-<slide class="" id="slide-22" style="background:;">
-  <hgroup>
-    <h2>記憶體不夠怎麼辦？</h2>
-  </hgroup>
-  <article data-timings="">
-    <ul>
-<li>買記憶體或買新電腦吧！（四萬塊可以買到64G）</li>
-<li>使用資料庫系統，更有效率的使用硬碟</li>
-<li>使用更有效率的資料結構：
-
-<ul>
-<li>矩陣大部分是0 的時候，使用Matrix套件的Sparse Matrix結構</li>
-<li>大量重復的字串資料，可試著使用factor物件來節省記憶體</li>
-</ul></li>
-</ul>
-
-<div style='float:left;width:48%;'>
-<pre><code class="r">library(Matrix)
-data(KNex)
-class(KNex$mm)[1]
-</code></pre>
-
-<pre><code>## [1] &quot;dgCMatrix&quot;
-</code></pre>
-
-<pre><code class="r">object.size(KNex$mm)
-</code></pre>
-
-<pre><code>## 109336 bytes
-</code></pre>
-
-</div>
-  <div style='float:right;width:48%;'>
-<pre><code class="r">mm &lt;- as(KNex$mm, &quot;matrix&quot;)
-class(mm)
-</code></pre>
-
-<pre><code>## [1] &quot;matrix&quot;
-</code></pre>
-
-<pre><code class="r">object.size(mm)
-</code></pre>
-
-<pre><code>## 10537968 bytes
-</code></pre>
-
-</div>
-  
-  </article>
-  <!-- Presenter Notes -->
-</slide>
-
-<slide class="large" id="slide-23">
-<hgroup>
-  
-</hgroup>
-<article class = 'flexbox vcenter'>
-<p>加快運算速度</p>
-
-</article>
-<!-- Presenter Notes -->
-</slide>
-<slide class="large" id="slide-24">
-<hgroup>
-  
-</hgroup>
-<article class = 'flexbox vcenter'>
-<p>改善的方法</p>
-
-<h3>利用compiler::cmpfun來將函數編譯成byte code</h3>
-
-<h3>使用別人寫好的高效能套件</h3>
-
-<h3>使用parallel套件來運用CPU的多核心</h3>
-
-<h3>使用Rcpp套件來快速開發C++程式提升效能</h3>
-
-<h3>使用更快的BLAS套件</h3>
-
-</article>
-<!-- Presenter Notes -->
-</slide>
-<slide class="" id="slide-25" style="background:;">
-  <hgroup>
-    <h2>Compiler 效能比較</h2>
-  </hgroup>
-  <article data-timings="">
-    <pre><code class="r">library(compiler)
-f &lt;- function(n, x = 1) for (i in 1:n) x = 1/(1 + x)
-lf &lt;- cmpfun(f)
-N &lt;- 1e+06
-library(rbenchmark)
-benchmark(f(N, 1), lf(N, 1))
-</code></pre>
-
-<pre><code>##       test replications elapsed relative user.self sys.self user.child
-## 1  f(N, 1)          100   74.54    3.714     73.89    0.299          0
-## 2 lf(N, 1)          100   20.07    1.000     19.67    0.315          0
-##   sys.child
-## 1         0
-## 2         0
-</code></pre>
-
-  </article>
-  <!-- Presenter Notes -->
-</slide>
-
-<slide class="large" id="slide-26">
-<hgroup>
-  
-</hgroup>
-<article class = 'flexbox vcenter'>
-<p>包成套件後，預設會使用byte code</p>
-
-<h3>DESCRIPTION: ByteCompile</h3>
-
-</article>
-<!-- Presenter Notes -->
-</slide>
-<slide class="large" id="slide-27">
-<hgroup>
-  
-</hgroup>
-<article class = 'flexbox vcenter'>
-<p>R&#39;s BLAS v.s. Apple&#39;s BLAS (可參考<a href="http://r.research.att.com/man/RMacOSX-FAQ.html#Which-BLAS-is-used-and-how-can-it-be-changed_003f">RMacOSX-FAQ</a>)</p>
-
-<!-- html table generated in R 3.0.2 by xtable 1.7-1 package -->
-
-<!-- Fri Apr 18 21:20:09 2014 -->
-
-<TABLE border=1>
-<TR> <TH>  </TH> <TH> Operation </TH> <TH> Dimension </TH> <TH> BLAS </TH> <TH> Apple.s.BLAS </TH>  </TR>
-  <TR> <TD align="right"> 1 </TD> <TD> Creation, transp., deformation </TD> <TD> 2500x2500 </TD> <TD> 1.04 </TD> <TD> 1.05 </TD> </TR>
-  <TR> <TD align="right"> 2 </TD> <TD> normal random matrix </TD> <TD> 2400x2400 </TD> <TD> 0.17 </TD> <TD> 0.2 </TD> </TR>
-  <TR> <TD align="right"> 3 </TD> <TD> sorting </TD> <TD> 7M </TD> <TD> 0.67 </TD> <TD> 0.68 </TD> </TR>
-  <TR> <TD align="right"> 4 </TD> <TD> Cross-product </TD> <TD> 2800x2800 </TD> <TD> 11.91 </TD> <TD> <font color='red'>0.55</font> </TD> </TR>
-  <TR> <TD align="right"> 5 </TD> <TD> linear regr. </TD> <TD> 3000x3000 </TD> <TD> 5.48 </TD> <TD> <font color='red'>0.33</font> </TD> </TR>
-  <TR> <TD align="right"> 6 </TD> <TD> FFT </TD> <TD> 2.4M </TD> <TD> 0.45 </TD> <TD> 0.45 </TD> </TR>
-  <TR> <TD align="right"> 7 </TD> <TD> Eigenvalues </TD> <TD> 640x640 </TD> <TD> 0.82 </TD> <TD> 0.42 </TD> </TR>
-  <TR> <TD align="right"> 8 </TD> <TD> Determinant </TD> <TD> 2500x2500 </TD> <TD> 3.84 </TD> <TD> <font color='red'>0.45</font> </TD> </TR>
-  <TR> <TD align="right"> 9 </TD> <TD> Cholesky Decomp. </TD> <TD> 3000x3000 </TD> <TD> 4.56 </TD> <TD> <font color='red'>0.32</font> </TD> </TR>
-  <TR> <TD align="right"> 10 </TD> <TD> Inverse </TD> <TD> 1600x1600 </TD> <TD> 3.77 </TD> <TD> <font color='red'>1.25</font> </TD> </TR>
-   </TABLE>
-
-</article>
-<!-- Presenter Notes -->
-</slide>
-<slide class="large" id="slide-28">
-<hgroup>
-  
-</hgroup>
-<article class = 'flexbox vcenter'>
-<p>Parallel &amp; Bootstrap</p>
-
-<pre><code>boot(df, f, R = 100, parallel = &quot;multicore&quot;, ncpus = 4)
-2                   boot(df, f, R = 100, parallel = &quot;no&quot;)
-  replications elapsed relative user.self sys.self user.child
-1           20 311.831    1.000     6.388    0.560    876.979
-2           20 622.117    1.995   620.335    0.112      0.000
-  sys.child
-1      5.26
-2      0.00
-</code></pre>
-
-</article>
-<!-- Presenter Notes -->
-</slide>
-<slide class="large" id="slide-29">
-<hgroup>
-  
-</hgroup>
-<article class = 'flexbox vcenter'>
-<p>改善資料讀取的速度</p>
-
-</article>
-<!-- Presenter Notes -->
-</slide>
-<slide class="large" id="slide-30">
-<hgroup>
-  
-</hgroup>
-<article class = 'flexbox vcenter'>
-<p>加強資料讀取的效能</p>
-
-<h3>儲存成壓縮格式（把硬碟讀取時間變成CPU的時間）</h3>
-
-<h3>SSD</h3>
-
-<h3>分散式讀取</h3>
-
-</article>
-<!-- Presenter Notes -->
-</slide>
-<slide class="large" id="slide-31">
-<hgroup>
-  
-</hgroup>
-<article class = 'flexbox vcenter'>
-<p>Spark </p>
-
-<p><img src="assets/img/Spark.png" class="fit100"/></p>
-
-</article>
-<!-- Presenter Notes -->
-</slide>
-<slide class="large" id="slide-32">
-<hgroup>
-  
-</hgroup>
-<article class = 'flexbox vcenter'>
-<p>Single Machine</p>
-
-<pre><code>2014-04-17 19:20:02 INFO::Table 201404071810 is existed
-2014-04-17 19:20:02 INFO::Table 201404071850 is existed
-...
-2014-04-17 19:21:37 INFO::parsing 047/20140417/ExposeLog201404171720.txt ...
-2014-04-17 19:21:40 INFO::parsing 025/20140417/ExposeLog201404171720.txt ...
-2
-...
-2014-04-17 19:27:22 INFO::parsing 017/PersonLog201404171730.txt
-2014-04-17 19:27:46 INFO::parsing 017/PersonLog201404171730.txt
-...
-2014-04-17 19:46:14 INFO::{
-    &quot;ETag&quot;: &quot;\&quot;1467fb79cc5ea56dc156ab37eeb413cb\&quot;&quot;
-}
-</code></pre>
-
-</article>
-<!-- Presenter Notes -->
-</slide>
-<slide class="" id="slide-33" style="background:;">
-  <article data-timings="">
-    
-<div style='float:left;width:48%;'>
-<h2>單台機器讀取</h2>
-
-<p><img src="assets/img/1node.png" class="fit100" /></p>
-
-</div>
-  <div style='float:right;width:48%;'>
-<h2>多台機器讀取</h2>
-
-<p><img src="assets/img/nnode.png" class="fit100" /></p>
-
-</div>
-  
-  </article>
-  <!-- Presenter Notes -->
-</slide>
-
-<slide class="large" id="slide-34">
-<hgroup>
-  
-</hgroup>
-<article class = 'flexbox vcenter'>
-<p>演算法</p>
-
-</article>
-<!-- Presenter Notes -->
-</slide>
-<slide class="large" id="slide-35">
-<hgroup>
-  
-</hgroup>
-<article class = 'flexbox vcenter'>
-<p>如何改善演算法及實作的效能</p>
-
-<h3>改善資料結構</h3>
-
-<h3>改善最佳化的演算法</h3>
-
-</article>
-<!-- Presenter Notes -->
-</slide>
-<slide class="large" id="slide-36">
-<hgroup>
-  
-</hgroup>
-<article class = 'flexbox vcenter'>
-<p>查詢的效能比較</p>
-
-<h3>(取自<a href="http://www.ptt.cc/bbs/R_Language/M.1396729914.A.B34.html">ptt</a>)</h3>
-
-<p>從iris選取Sepal.Width為3.5的row</p>
-
-<p>m: <code>data.frame</code></p>
-
-<p>m2: <code>data.table</code> with indexing</p>
-
-<p>m3: <code>matrix</code></p>
-
-</article>
-<!-- Presenter Notes -->
-</slide>
-<slide class="large" id="slide-37">
-<hgroup>
-  
-</hgroup>
-<article class = 'flexbox vcenter'>
-<p>200倍的iris(3萬rows)</p>
-
-<pre><code class="r">                                          expr replications elapsed relative
-4                filter(m, Sepal.Width == 3.5)          100    0.05      1.0
-5               filter(m2, Sepal.Width == 3.5)          100    0.14      2.8
-7 m[fmatch(m$Sepal.Width, 3.5, nomatch = 0), ]          100    0.25      5.0
-1                    m[m$Sepal.Width == 3.5, ]          100    0.44      8.8
-8 m2[fmatch(m2$Sepal.Width, 3.5, nomatch = 0)]          100    0.33      6.6
-3                                   m2[J(3.5)]          100    0.17      3.4
-6                                m2[list(3.5)]          100    0.14      2.8
-9                         m3[m3[, 2] == 3.5, ]          100    0.22      4.4
-2                subset(m, Sepal.Width == 3.5)          100    0.55     11.0
-</code></pre>
-
-</article>
-<!-- Presenter Notes -->
-</slide>
-<slide class="large" id="slide-38">
-<hgroup>
-  
-</hgroup>
-<article class = 'flexbox vcenter'>
-<p>5000倍的iris(75萬rows)</p>
-
-<pre><code class="r">                                          expr replications elapsed relative
-4                filter(m, Sepal.Width == 3.5)          100    1.46    5.214
-5               filter(m2, Sepal.Width == 3.5)          100    0.84    3.000
-7 m[fmatch(m$Sepal.Width, 3.5, nomatch = 0), ]          100    6.46   23.071
-1                    m[m$Sepal.Width == 3.5, ]          100   10.71   38.250
-8 m2[fmatch(m2$Sepal.Width, 3.5, nomatch = 0)]          100    7.37   26.321
-3                                   m2[J(3.5)]          100    0.28    1.000
-6                                m2[list(3.5)]          100    0.34    1.214
-9                         m3[m3[, 2] == 3.5, ]          100    4.96   17.714
-2                subset(m, Sepal.Width == 3.5)          100   13.67   48.821
-</code></pre>
-
-</article>
-<!-- Presenter Notes -->
-</slide>
-<slide class="segue dark" id="slide-39" style="background:;">
-  <hgroup>
-    <h2>實務經驗分享</h2>
-  </hgroup>
-  <article data-timings="">
-    
-  </article>
-  <!-- Presenter Notes -->
-</slide>
-
-<slide class="large" id="slide-40">
-<hgroup>
-  
-</hgroup>
-<article class = 'flexbox vcenter'>
-<p>廣告無所不在</p>
-
-<p><img src="assets/img/disp.png" class="fit100" /></p>
-
-</article>
-<!-- Presenter Notes -->
-</slide>
-<slide class="large" id="slide-41">
-<hgroup>
-  
-</hgroup>
-<article class = 'flexbox vcenter'>
-<p><img src="assets/img/OnlineAd.png" class="fit100" /></p>
-
-</article>
-<!-- Presenter Notes -->
-</slide>
-<slide class="large" id="slide-42">
-<hgroup>
-  
-</hgroup>
-<article class = 'flexbox vcenter'>
-<p>從大量的瀏覽記錄中，學習出推薦方法</p>
-
-<p><img src="assets/img/Data.png" class="fit100" /></p>
-
-</article>
-<!-- Presenter Notes -->
-</slide>
-<slide class="large" id="slide-43">
-<hgroup>
-  
-</hgroup>
-<article class = 'flexbox vcenter'>
-<p>具體而言，</p>
-
-<p>以下是「從資料學習」的一個起點</p>
-
-</article>
-<!-- Presenter Notes -->
-</slide>
-<slide class="large" id="slide-44">
-<hgroup>
-  
-</hgroup>
-<article class = 'flexbox vcenter'>
-<p>Logistic Regression</p>
-
-<p>\[P( y | x ) = \frac{1}{1 + e^{- y w^T x}}\]</p>
-
-<h3>\(y\): 有沒有點擊</h3>
-
-<h3>\(x\): 相關參數</h3>
-
-<h3>\(w \in \mathbb{R}^d\): 模型</h3>
-
-</article>
-<!-- Presenter Notes -->
-</slide>
-<slide class="large" id="slide-45">
-<hgroup>
-  
-</hgroup>
-<article class = 'flexbox vcenter'>
-<p>手上有這些資料</p>
-
-<p>\[(y_1, x_1), (y_2, x_2), ...(y_n, x_n)\]</p>
-
-</article>
-<!-- Presenter Notes -->
-</slide>
-<slide class="large" id="slide-46">
-<hgroup>
-  
-</hgroup>
-<article class = 'flexbox vcenter'>
-<p>\(n \sim 10^9\) 系統更新後指數會再往上跑</p>
-
-<p>\(d \sim 10^4\) 至 \(10^7\)</p>
-
-</article>
-<!-- Presenter Notes -->
-</slide>
-<slide class="large" id="slide-47">
-<hgroup>
-  
-</hgroup>
-<article class = 'flexbox vcenter'>
-<p>Regularized Loss:</p>
-
-<p>\[f(w) = \frac{1}{2} w^T w + C \sum_{i=1}^n {log(1 + e^{-y_i w^T x_i})}\]</p>
-
-<p>定出 \((y_1, x_1), ...\) 之後，
-理想的模型 \(w\) 是讓 \(f\) 最小的點*</p>
-
-</article>
-<!-- Presenter Notes -->
-</slide>
-<slide class="large" id="slide-48">
-<hgroup>
-  
-</hgroup>
-<article class = 'flexbox vcenter'>
-<p><a href="http://static.googleusercontent.com/media/research.google.com/zh-TW//pubs/archive/41159.pdf">Google</a>:</p>
-
-<p>$f$要小</p>
-
-<p>$w$要短(非0的要少)*</p>
-
-</article>
-<!-- Presenter Notes -->
-</slide>
-<slide class="large" id="slide-49">
-<hgroup>
-  
-</hgroup>
-<article class = 'flexbox vcenter'>
-<p>讓我們看看一個演算法的研究方向</p>
-
-</article>
-<!-- Presenter Notes -->
-</slide>
-<slide class="large" id="slide-50">
-<hgroup>
-  
-</hgroup>
-<article class = 'flexbox vcenter'>
-<p>從牛頓法開始</p>
-
-<p>如果已經有模型 $w_k$，我們要找更好地點</p>
-
-<p>找\(s\) 使得以下式子最小：</p>
-
-<p>\[\nabla f(w_k) ^T s + \frac{1}{2} s^T \nabla^2 f(w_k) s\]</p>
-
-</article>
-<!-- Presenter Notes -->
-</slide>
-<slide class="large" id="slide-51">
-<hgroup>
-  
-</hgroup>
-<article class = 'flexbox vcenter'>
-<p>對 \(s\) 微一下</p>
-
-<p>$s$要滿足</p>
-
-<p>\[\nabla^2 f(w_k) s = - \nabla f(w_k)\]</p>
-
-</article>
-<!-- Presenter Notes -->
-</slide>
-<slide class="large" id="slide-52">
-<hgroup>
-  
-</hgroup>
-<article class = 'flexbox vcenter'>
-<p>Hessian矩陣 \(\nabla^2 f(w) \in \mathbb{R}^{n \times n}\)</p>
-
-<p>但是可以寫成</p>
-
-<p>\[I_n + CX^T D X\]</p>
-
-<h3>\(X\) 是資料矩陣</h3>
-
-<h3>\(D\) 是對角化矩陣</h3>
-
-</article>
-<!-- Presenter Notes -->
-</slide>
-<slide class="large" id="slide-53">
-<hgroup>
-  
-</hgroup>
-<article class = 'flexbox vcenter'>
-<p>可以用Conjugate Gradient的方法解</p>
-
-<p>\[s + C X^T D X s = - \nabla f(w_k)\]</p>
-
-<p>只要算 Hessian和vector的乘積 </p>
-
-<p>我們不需要知道Hessian就可以找\(w\)</p>
-
-</article>
-<!-- Presenter Notes -->
-</slide>
-<slide class="large" id="slide-54">
-<hgroup>
-  
-</hgroup>
-<article class = 'flexbox vcenter'>
-<p>矩陣和向量的乘法可以平行化!</p>
-
-<p><img src="assets/img/SA2.png" class="fit100" /></p>
-
-</article>
-<!-- Presenter Notes -->
-</slide>
-<slide class="large" id="slide-55">
-<hgroup>
-  
-</hgroup>
-<article class = 'flexbox vcenter'>
-<p>理論搞懂了，要實做！</p>
-
-<p>把<a href="http://www.csie.ntu.edu.tw/%7Ecjlin/liblinear/">LIBLINEAR</a>和<a href="http://en.wikipedia.org/wiki/Message_Passing_Interface">MPI</a>參在一起</p>
-
-<p>把<a href="http://cran.r-project.org/web/packages/Matrix/index.html">Matrix</a>、<a href="http://dirk.eddelbuettel.com/code/rcpp.html">Rcpp</a>和<a href="http://en.wikipedia.org/wiki/Programming_with_Big_Data_in_R">pbdMPI</a>參在一起</p>
-
-<p>可參考<a href="http://programmermagazine.github.io/201310/htm/article6.html">pbdMPI</a>和<a href="https://bitbucket.org/wush978/largescalelogisticregression/src/4daf9c5bba5cd0e4f35afd813866e6da72ca92bb/?at=hstrust">HsTrust</a></p>
-
-</article>
-<!-- Presenter Notes -->
-</slide>
-<slide class="large" id="slide-56">
-<hgroup>
-  
-</hgroup>
-<article class = 'flexbox vcenter'>
-<p><a href="http://cran.r-project.org/web/packages/Matrix/index.html">Matrix</a>在重複計算Hessian太慢了</p>
-
-<p>要改進</p>
-
-<p><a href="http://dirk.eddelbuettel.com/code/rcpp.html">Rcpp</a>再度救援</p>
-
-</article>
-<!-- Presenter Notes -->
-</slide>
-<slide class="large" id="slide-57">
-<hgroup>
-  
-</hgroup>
-<article class = 'flexbox vcenter'>
-<p>辛苦寫出來，也不知道對不對</p>
-
-<p>有R 在手邊，馬上比較小資料的結果</p>
-
-</article>
-<!-- Presenter Notes -->
-</slide>
-<slide class="large" id="slide-58">
-<hgroup>
-  
-</hgroup>
-<article class = 'flexbox vcenter'>
-<p>我還想要更快</p>
-
-<p>嘗試比較其他BLAS</p>
-
-</article>
-<!-- Presenter Notes -->
-</slide>
-<slide class="large" id="slide-59">
-<hgroup>
-  
-</hgroup>
-<article class = 'flexbox vcenter'>
-<p>沒有比我們目前的快</p>
-
-<pre><code>nnz = 1.000000e+06, rows = 1.000000e+05, cols = 1.000000e+03, density = 1.000000e-02, times = 100, nr_threads = 1
+<pre><code>nnz = 1.000000e+06, rows = 1.000000e+05, cols = 1.000000e+03, 
+density = 1.000000e-02, times = 100, nr_threads = 1
 generating data...done 453ms
 CSR Xv:  388ms
 CSR XTv: 288ms
@@ -1079,7 +371,284 @@ error: 0.000000
 </article>
 <!-- Presenter Notes -->
 </slide>
-<slide class="large" id="slide-60">
+<slide class="large" id="slide-19">
+<hgroup>
+  
+</hgroup>
+<article class = 'flexbox vcenter'>
+<p>再透過<code>pbdMPI</code>開發分散式矩陣乘法</p>
+
+<p>利用更多CPU和更多記憶體提升效能</p>
+
+<p>\[\left(\begin{array}{c}X_1 \\ X_2\end{array}\right) w = \left(\begin{array}{c}X_1 w \\ X_2 w\end{array}\right)\]</p>
+
+</article>
+<!-- Presenter Notes -->
+</slide>
+<slide class="large" id="slide-20">
+<hgroup>
+  
+</hgroup>
+<article class = 'flexbox vcenter'>
+<p><code>pbdMPI</code>是<a href="http://r-pbd.org/">pbdR(Programming with Big Data in R)</a>專案的套件之一</p>
+
+</article>
+<!-- Presenter Notes -->
+</slide>
+<slide class="large" id="slide-21">
+<hgroup>
+  
+</hgroup>
+<div style='float:left;width:48%;' class='flexbox vcenter'>
+  <h2>pbdMPI的優點</h2>
+
+<h3>好安裝</h3>
+
+<h3>好開發</h3>
+
+</div>
+<div style='float:right;width:48%;' class='flexbox vcenter'>
+  <pre><code class="r">library(pbdMPI)
+.rank &lt;- comm.rank()
+filename &lt;- sprintf(&quot;%d.csv&quot;, .rank)
+data &lt;- read.csv(filename)
+target &lt;- reduce(sum(data$value), op=&quot;sum&quot;)
+finalize()
+</code></pre>
+
+</div>
+</slide>
+<slide class="large" id="slide-22">
+<hgroup>
+  
+</hgroup>
+<div style='float:left;width:48%;' class='flexbox vcenter'>
+  <h2>最佳化演算法</h2>
+
+<h3>快速</h3>
+
+<h3>不用計算Hessian矩陣</h3>
+
+<h3>很棒的實作<a href="http://www.csie.ntu.edu.tw/%7Ecjlin/liblinear/">LIBLINEAR</a></h3>
+
+</div>
+<div style='float:right;width:48%;' class='flexbox vcenter'>
+  <h3><a href="http://dx.doi.org/10.1145/1273496.1273567">Lin et al. 2007 Trust Region Newton Methods for Large-scale Logistic Regression</a></h3>
+
+</div>
+</slide>
+<slide class="large" id="slide-23">
+<hgroup>
+  
+</hgroup>
+<article class = 'flexbox vcenter'>
+<p>為了加強效能</p>
+
+<p>並且能夠更方便的更改模型</p>
+
+<p>我們自己包LIBLINEAR到R中</p>
+
+</article>
+<!-- Presenter Notes -->
+</slide>
+<slide class="large" id="slide-24">
+<hgroup>
+  <h2>LIBLINEAR 原始碼中的 <code>tron.h</code></h2>
+</hgroup>
+<article class = 'flexbox vcenter'>
+<pre><code class="cpp">class TRON
+{
+public:
+  TRON(const function *fun_obj, double eps = 0.1, int max_iter = 1000);
+  ~TRON();
+
+    void tron(double *w);
+    void set_print_string(void (*i_print) (const char *buf));
+
+private:
+    //...
+};
+</code></pre>
+
+<ul>
+<li>TRON是最佳化的核心演算法的實作</li>
+<li>TRON沒有牽涉到資料，甚至沒有牽涉到Loss Function</li>
+<li><code>function</code>提供了一個界面</li>
+</ul>
+
+</article>
+<!-- Presenter Notes -->
+</slide>
+<slide class="" id="slide-25">
+<hgroup>
+  <h2>界面：<code>function</code></h2>
+</hgroup>
+<article class = 'flexbox vcenter'>
+<pre><code class="cpp">class function
+{
+public:
+  virtual double fun(double *w) = 0 ;
+  virtual void grad(double *w, double *g) = 0 ;
+    virtual void Hv(double *s, double *Hs) = 0 ;
+
+    virtual int get_nr_variable(void) = 0 ;
+    virtual ~function(void){}
+};
+</code></pre>
+
+<ul>
+<li><code>fun</code>代表objective function</li>
+<li><code>grad</code>是<code>fun</code>的gradient</li>
+<li><code>Hv</code>是<code>fun</code>的hessian乘上一個向量</li>
+</ul>
+
+</article>
+<!-- Presenter Notes -->
+</slide>
+<slide class="large" id="slide-26">
+<hgroup>
+  <h2>利用<code>Rcpp Modules</code>把<code>function</code>暴露到R中</h2>
+</hgroup>
+<div style='float:left;width:48%;' class='flexbox vcenter'>
+  <h3>實作Rfunction</h3>
+
+<pre><code class="cpp">class Rfunction : public ::function {
+  Rcpp::Function _fun, _grad, _Hv;
+  Rcpp::NumericVector _w, _s;
+
+  Rfunction(SEXP fun, SEXP grad, SEXP Hv, int n) 
+  : _fun(fun), _grad(grad), _Hv(Hv), _w(n), _s(n) { }
+
+  //...
+};
+
+SEXP tron//...
+</code></pre>
+
+</div>
+<div style='float:right;width:48%;' class='flexbox vcenter'>
+  <p>將Rfunction暴露出來</p>
+
+<pre><code class="cpp">RCPP_MODULE(HsTrust) {  
+  class_&lt;Rfunction&gt;(&quot;HsTrust&quot;)
+    .constructor&lt;SEXP, SEXP, SEXP, int&gt;()
+    .property(&quot;n&quot;, &amp;Rfunction::get_nr_variable, 
+    &quot;Number of parameters&quot;)
+    .method(&quot;tron&quot;, &amp;tron)
+    .method(&quot;tron_with_begin&quot;, 
+    &amp;tron_with_begin)
+    ;   
+}
+</code></pre>
+
+</div>
+</slide>
+<slide class="large" id="slide-27">
+<hgroup>
+  
+</hgroup>
+<div style='float:left;width:48%;' class='flexbox vcenter'>
+  <p>實作的結果可包裝成<a href="https://bitbucket.org/wush978/largescalelogisticregression/src/4daf9c5bba5cd0e4f35afd813866e6da72ca92bb/?at=hstrust">套件</a></p>
+
+<pre><code class="r">library(devtools)
+install_bitbucket(
+  repo=&quot;largescalelogisticregression&quot;, 
+  username=&quot;wush978&quot;, ref=&quot;hstrust&quot;)
+</code></pre>
+
+</div>
+<div style='float:right;width:48%;' class='flexbox vcenter'>
+  <p>使用</p>
+
+<pre><code class="r">library(HsTrust)
+
+beta &lt;- 1
+fun &lt;- function(w) 
+  sum((w-beta)^4)
+
+grad &lt;- function(w)
+  4 * (w-beta)^3
+
+Hs &lt;- function(w, s) 
+  12 * (w-beta)^2 * s
+
+obj &lt;- new(HsTrust, fun, grad, Hs, 1)
+print(r &lt;- obj$tron(1e-4, TRUE))
+</code></pre>
+
+</div>
+</slide>
+<slide class="" id="slide-28">
+<hgroup>
+  
+</hgroup>
+<article class = 'flexbox vcenter'>
+<pre><code class="r">library(HsTrust)
+# ...
+print(r &lt;- obj$tron(1e-4, TRUE))
+</code></pre>
+
+<pre><code>iter  1 act 8.025e-01 pre 6.667e-01 delta 4.186e-01 f 1.000e+00 |g| 4.000e+00 CG   1
+iter  2 act 1.585e-01 pre 1.317e-01 delta 4.186e-01 f 1.975e-01 |g| 1.185e+00 CG   1
+iter  3 act 3.131e-02 pre 2.601e-02 delta 4.186e-01 f 3.902e-02 |g| 3.512e-01 CG   1
+iter  4 act 6.185e-03 pre 5.138e-03 delta 4.186e-01 f 7.707e-03 |g| 1.040e-01 CG   1
+iter  5 act 1.222e-03 pre 1.015e-03 delta 4.186e-01 f 1.522e-03 |g| 3.083e-02 CG   1
+iter  6 act 2.413e-04 pre 2.005e-04 delta 4.186e-01 f 3.007e-04 |g| 9.135e-03 CG   1
+iter  7 act 4.767e-05 pre 3.960e-05 delta 4.186e-01 f 5.940e-05 |g| 2.707e-03 CG   1
+iter  8 act 9.416e-06 pre 7.823e-06 delta 4.186e-01 f 1.173e-05 |g| 8.019e-04 CG   1
+[1] 0.961
+</code></pre>
+
+</article>
+<!-- Presenter Notes -->
+</slide>
+<slide class="large" id="slide-29">
+<hgroup>
+  
+</hgroup>
+<article class = 'flexbox vcenter'>
+<p>結合<code>pbdMPI</code>和<code>Rcpp Modules</code></p>
+
+<p>讓TRON呼叫分散式的運算系統</p>
+
+<p>SPMD架構，無master，一次資料交換</p>
+
+<pre><code class="r">objective_function &lt;- function(w) {
+  logger(sum(w))
+  regularization &lt;- sum((w - prior)^2) / 2
+  lik &lt;- sum(C * log(1 + exp(- y.value * Xv(X, w))))
+  lik.all &lt;- allreduce(x = lik, x.buffer = buffer.0, op = &quot;sum&quot;)
+  return(regularization + lik.all[1])
+}
+
+hs &lt;- new(HsTrust, objective_function, ...)
+</code></pre>
+
+</article>
+<!-- Presenter Notes -->
+</slide>
+<slide class="large" id="slide-30">
+<hgroup>
+  
+</hgroup>
+<article class = 'flexbox vcenter'>
+<p><code>objective_function</code>非常易於修改</p>
+
+<p>所以我們能將注意力專注於模型上</p>
+
+<pre><code class="r">objective_function &lt;- function(w) {
+  logger(sum(w))
+  regularization &lt;- sum((w - prior)^2) / 2
+  lik &lt;- sum(C * log(1 + exp(- y.value * Xv(X, w))))
+  lik.all &lt;- allreduce(x = lik, x.buffer = buffer.0, op = &quot;sum&quot;)
+  return(regularization + lik.all[1])
+}
+</code></pre>
+
+</article>
+<!-- Presenter Notes -->
+</slide>
+<slide class="large" id="slide-31">
 <hgroup>
   
 </hgroup>
@@ -1091,7 +660,7 @@ error: 0.000000
 </article>
 <!-- Presenter Notes -->
 </slide>
-<slide class="dark segue" id="slide-61" style="background:;">
+<slide class="dark segue" id="slide-32" style="background:;">
   <hgroup>
     <h2>資料越大，結果就會越好嗎？</h2>
   </hgroup>
@@ -1101,7 +670,7 @@ error: 0.000000
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-62" style="background:;">
+<slide class="" id="slide-33" style="background:;">
   <article data-timings="">
     <p><img src="assets/img/datasize.png" class="fit100"/></p>
 
@@ -1109,7 +678,7 @@ error: 0.000000
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="dark segue" id="slide-63" style="background:;">
+<slide class="dark segue" id="slide-34" style="background:;">
   <hgroup>
     <h2>不同的模型對預測會有影響嗎？</h2>
   </hgroup>
@@ -1119,7 +688,7 @@ error: 0.000000
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="large" id="slide-64">
+<slide class="large" id="slide-35">
 <hgroup>
   
 </hgroup>
@@ -1131,16 +700,16 @@ error: 0.000000
 </article>
 <!-- Presenter Notes -->
 </slide>
-<slide class="large" id="slide-65">
+<slide class="large" id="slide-36">
 <hgroup>
   
 </hgroup>
 <article class = 'flexbox vcenter'>
 <p>實驗結果</p>
 
-<!-- html table generated in R 3.0.2 by xtable 1.7-1 package -->
+<!-- html table generated in R 3.0.3 by xtable 1.7-3 package -->
 
-<!-- Thu Apr 17 22:07:53 2014 -->
+<!-- Thu May 22 21:01:37 2014 -->
 
 <TABLE border=1>
 <TR> <TH>  </TH> <TH> auc </TH> <TH> Regularization </TH> <TH> FeatureSet </TH> <TH> DayEffect </TH>  </TR>
@@ -1167,7 +736,7 @@ error: 0.000000
 </article>
 <!-- Presenter Notes -->
 </slide>
-<slide class="large" id="slide-66">
+<slide class="large" id="slide-37">
 <hgroup>
   
 </hgroup>
@@ -1176,12 +745,12 @@ error: 0.000000
 
 <h3>感謝R 強大的分析功能</h3>
 
-<!-- html table generated in R 3.0.2 by xtable 1.7-1 package -->
+<!-- html table generated in R 3.0.3 by xtable 1.7-3 package -->
 
-<!-- Thu Apr 17 22:09:52 2014 -->
+<!-- Thu May 22 21:01:37 2014 -->
 
 <TABLE border=1>
-<TR> <TH>  </TH> <TH> row.names  Estimate </TH> <TH> Std. Error </TH> <TH> t value </TH> <TH> Pr(&gt |t|) </TH>  </TR>
+<TR> <TH>  </TH> <TH> row.names  Estimate </TH> <TH> Std. Error </TH> <TH> t value </TH> <TH> Pr(&gt;|t|) </TH>  </TR>
   <TR> <TD align="right"> (Intercept) </TD> <TD align="right"> 1.0343 </TD> <TD align="right"> 0.0009 </TD> <TD align="right"> 1165.2725 </TD> <TD align="right"> 0.0000 </TD> </TR>
   <TR> <TD align="right"> Regularization10 </TD> <TD align="right"> -0.0139 </TD> <TD align="right"> 0.0009 </TD> <TD align="right"> -15.6506 </TD> <TD align="right"> 0.0000 </TD> </TR>
   <TR> <TD align="right"> Regularization20 </TD> <TD align="right"> -0.0202 </TD> <TD align="right"> 0.0009 </TD> <TD align="right"> -22.7578 </TD> <TD align="right"> 0.0000 </TD> </TR>
@@ -1195,7 +764,7 @@ error: 0.000000
 </article>
 <!-- Presenter Notes -->
 </slide>
-<slide class="large" id="slide-67">
+<slide class="large" id="slide-38">
 <hgroup>
   
 </hgroup>
@@ -1205,92 +774,14 @@ error: 0.000000
 </article>
 <!-- Presenter Notes -->
 </slide>
-<slide class="large" id="slide-68">
+<slide class="large" id="slide-39">
 <hgroup>
   
 </hgroup>
 <article class = 'flexbox vcenter'>
 <p>成果</p>
 
-<p><img src="assets/fig/unnamed-chunk-9.png" alt="plot of chunk unnamed-chunk-9"> </p>
-
-</article>
-<!-- Presenter Notes -->
-</slide>
-<slide class="dark segue" id="slide-69" style="background:;">
-  <hgroup>
-    <h2>革命尚未成功，同志仍需努力</h2>
-  </hgroup>
-  <article data-timings="">
-    
-  </article>
-  <!-- Presenter Notes -->
-</slide>
-
-<slide class="large" id="slide-70">
-<hgroup>
-  
-</hgroup>
-<article class = 'flexbox vcenter'>
-<p>Online Logistic Regression</p>
-
-<h3>更快</h3>
-
-<h3>更有彈性</h3>
-
-<h3>更多因子</h3>
-
-</article>
-<!-- Presenter Notes -->
-</slide>
-<slide class="large" id="slide-71">
-<hgroup>
-  
-</hgroup>
-<article class = 'flexbox vcenter'>
-<p>TRON v.s. FTRL</p>
-
-<p><img src="assets/fig/unnamed-chunk-10.png" alt="plot of chunk unnamed-chunk-10"> </p>
-
-</article>
-<!-- Presenter Notes -->
-</slide>
-<slide class="dark segue" id="slide-72" style="background:;">
-  <hgroup>
-    <h2>總結</h2>
-  </hgroup>
-  <article data-timings="">
-    
-  </article>
-  <!-- Presenter Notes -->
-</slide>
-
-<slide class="large" id="slide-73">
-<hgroup>
-  
-</hgroup>
-<article class = 'flexbox vcenter'>
-<p>從大量的數據學出價值，我們需要</p>
-
-<h3>提出問題</h3>
-
-<h3>提出模型描述問題</h3>
-
-<h3>運用工程能力實做方法</h3>
-
-<h3>分析資料</h3>
-
-<h3>評估與比較</h3>
-
-</article>
-<!-- Presenter Notes -->
-</slide>
-<slide class="large" id="slide-74">
-<hgroup>
-  
-</hgroup>
-<article class = 'flexbox vcenter'>
-<p>Q&amp;A</p>
+<div class="rimage center"><img src="assets/fig/unnamed-chunk-7.png" title="plot of chunk unnamed-chunk-7" alt="plot of chunk unnamed-chunk-7" class="plot" /></div>
 
 </article>
 <!-- Presenter Notes -->
@@ -1307,7 +798,7 @@ error: 0.000000
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=2 title=''>
+        data-slide=2 title='Large Scale Learning in R'>
          2
       </a>
     </li>
@@ -1331,7 +822,7 @@ error: 0.000000
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=6 title='Large Scale Learning in R'>
+        data-slide=6 title=''>
          6
       </a>
     </li>
@@ -1349,7 +840,7 @@ error: 0.000000
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=9 title=''>
+        data-slide=9 title='問題的建模'>
          9
       </a>
     </li>
@@ -1385,13 +876,13 @@ error: 0.000000
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=15 title='解讀<code>profile1.out</code>'>
+        data-slide=15 title=''>
          15
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=16 title='怎麼知道記憶體不夠了？'>
+        data-slide=16 title=''>
          16
       </a>
     </li>
@@ -1415,19 +906,19 @@ error: 0.000000
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=20 title='<code>data.table</code>、<code>tracemem</code>使用範例'>
+        data-slide=20 title=''>
          20
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=21 title='Rcpp的Modify In Place範例'>
+        data-slide=21 title=''>
          21
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=22 title='記憶體不夠怎麼辦？'>
+        data-slide=22 title=''>
          22
       </a>
     </li>
@@ -1439,19 +930,19 @@ error: 0.000000
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=24 title=''>
+        data-slide=24 title='LIBLINEAR 原始碼中的 <code>tron.h</code>'>
          24
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=25 title='Compiler 效能比較'>
+        data-slide=25 title='界面：<code>function</code>'>
          25
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=26 title=''>
+        data-slide=26 title='利用<code>Rcpp Modules</code>把<code>function</code>暴露到R中'>
          26
       </a>
     </li>
@@ -1487,7 +978,7 @@ error: 0.000000
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=32 title=''>
+        data-slide=32 title='資料越大，結果就會越好嗎？'>
          32
       </a>
     </li>
@@ -1499,7 +990,7 @@ error: 0.000000
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=34 title=''>
+        data-slide=34 title='不同的模型對預測會有影響嗎？'>
          34
       </a>
     </li>
@@ -1529,218 +1020,8 @@ error: 0.000000
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=39 title='實務經驗分享'>
+        data-slide=39 title=''>
          39
-      </a>
-    </li>
-    <li>
-      <a href="#" target="_self" rel='tooltip' 
-        data-slide=40 title=''>
-         40
-      </a>
-    </li>
-    <li>
-      <a href="#" target="_self" rel='tooltip' 
-        data-slide=41 title=''>
-         41
-      </a>
-    </li>
-    <li>
-      <a href="#" target="_self" rel='tooltip' 
-        data-slide=42 title=''>
-         42
-      </a>
-    </li>
-    <li>
-      <a href="#" target="_self" rel='tooltip' 
-        data-slide=43 title=''>
-         43
-      </a>
-    </li>
-    <li>
-      <a href="#" target="_self" rel='tooltip' 
-        data-slide=44 title=''>
-         44
-      </a>
-    </li>
-    <li>
-      <a href="#" target="_self" rel='tooltip' 
-        data-slide=45 title=''>
-         45
-      </a>
-    </li>
-    <li>
-      <a href="#" target="_self" rel='tooltip' 
-        data-slide=46 title=''>
-         46
-      </a>
-    </li>
-    <li>
-      <a href="#" target="_self" rel='tooltip' 
-        data-slide=47 title=''>
-         47
-      </a>
-    </li>
-    <li>
-      <a href="#" target="_self" rel='tooltip' 
-        data-slide=48 title=''>
-         48
-      </a>
-    </li>
-    <li>
-      <a href="#" target="_self" rel='tooltip' 
-        data-slide=49 title=''>
-         49
-      </a>
-    </li>
-    <li>
-      <a href="#" target="_self" rel='tooltip' 
-        data-slide=50 title=''>
-         50
-      </a>
-    </li>
-    <li>
-      <a href="#" target="_self" rel='tooltip' 
-        data-slide=51 title=''>
-         51
-      </a>
-    </li>
-    <li>
-      <a href="#" target="_self" rel='tooltip' 
-        data-slide=52 title=''>
-         52
-      </a>
-    </li>
-    <li>
-      <a href="#" target="_self" rel='tooltip' 
-        data-slide=53 title=''>
-         53
-      </a>
-    </li>
-    <li>
-      <a href="#" target="_self" rel='tooltip' 
-        data-slide=54 title=''>
-         54
-      </a>
-    </li>
-    <li>
-      <a href="#" target="_self" rel='tooltip' 
-        data-slide=55 title=''>
-         55
-      </a>
-    </li>
-    <li>
-      <a href="#" target="_self" rel='tooltip' 
-        data-slide=56 title=''>
-         56
-      </a>
-    </li>
-    <li>
-      <a href="#" target="_self" rel='tooltip' 
-        data-slide=57 title=''>
-         57
-      </a>
-    </li>
-    <li>
-      <a href="#" target="_self" rel='tooltip' 
-        data-slide=58 title=''>
-         58
-      </a>
-    </li>
-    <li>
-      <a href="#" target="_self" rel='tooltip' 
-        data-slide=59 title=''>
-         59
-      </a>
-    </li>
-    <li>
-      <a href="#" target="_self" rel='tooltip' 
-        data-slide=60 title=''>
-         60
-      </a>
-    </li>
-    <li>
-      <a href="#" target="_self" rel='tooltip' 
-        data-slide=61 title='資料越大，結果就會越好嗎？'>
-         61
-      </a>
-    </li>
-    <li>
-      <a href="#" target="_self" rel='tooltip' 
-        data-slide=62 title=''>
-         62
-      </a>
-    </li>
-    <li>
-      <a href="#" target="_self" rel='tooltip' 
-        data-slide=63 title='不同的模型對預測會有影響嗎？'>
-         63
-      </a>
-    </li>
-    <li>
-      <a href="#" target="_self" rel='tooltip' 
-        data-slide=64 title=''>
-         64
-      </a>
-    </li>
-    <li>
-      <a href="#" target="_self" rel='tooltip' 
-        data-slide=65 title=''>
-         65
-      </a>
-    </li>
-    <li>
-      <a href="#" target="_self" rel='tooltip' 
-        data-slide=66 title=''>
-         66
-      </a>
-    </li>
-    <li>
-      <a href="#" target="_self" rel='tooltip' 
-        data-slide=67 title=''>
-         67
-      </a>
-    </li>
-    <li>
-      <a href="#" target="_self" rel='tooltip' 
-        data-slide=68 title=''>
-         68
-      </a>
-    </li>
-    <li>
-      <a href="#" target="_self" rel='tooltip' 
-        data-slide=69 title='革命尚未成功，同志仍需努力'>
-         69
-      </a>
-    </li>
-    <li>
-      <a href="#" target="_self" rel='tooltip' 
-        data-slide=70 title=''>
-         70
-      </a>
-    </li>
-    <li>
-      <a href="#" target="_self" rel='tooltip' 
-        data-slide=71 title=''>
-         71
-      </a>
-    </li>
-    <li>
-      <a href="#" target="_self" rel='tooltip' 
-        data-slide=72 title='總結'>
-         72
-      </a>
-    </li>
-    <li>
-      <a href="#" target="_self" rel='tooltip' 
-        data-slide=73 title=''>
-         73
-      </a>
-    </li>
-    <li>
-      <a href="#" target="_self" rel='tooltip' 
-        data-slide=74 title=''>
-         74
       </a>
     </li>
   </ul>

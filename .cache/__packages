@@ -1,7 +1,9 @@
 base
+bibtex
 boot
 data.table
 ggplot2
+knitcitations
 knitr
 Matrix
 rbenchmark
