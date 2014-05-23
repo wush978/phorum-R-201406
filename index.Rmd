@@ -10,7 +10,8 @@ widgets     : [mathjax]            # {mathjax, quiz, bootstrap}
 mode        : selfcontained # {standalone, draft}
 license: by-nc-sa
 logo: Taiwan-R-logo.png
---- .quote .segue .nobackground .dark
+--- &vcenter .large
+
 ```{r setup, include=FALSE,echo = F, message = F, warning = F, tidy = F, cache=FALSE}
 # make this an external chunk that can be included in any file
 library(xtable)
@@ -35,9 +36,17 @@ library(knitcitations)
 bib <- read.bib("index.bib")
 ```
 
---- .dark .segue .quote
+<img src="assets/img/MLDMMonday.jpg" class="grayscale fit100" />
 
-## Large Scale Learning in R
+Taiwan R User Group
+
+MLDMMonday: 每週一分享資料相關議題
+
+主題包含但不限於：
+
+R 套件使用
+
+機器學習和統計模型
 
 --- &vcenter .large
 

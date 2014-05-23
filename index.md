@@ -10,13 +10,22 @@ widgets     : [mathjax]            # {mathjax, quiz, bootstrap}
 mode        : selfcontained # {standalone, draft}
 license: by-nc-sa
 logo: Taiwan-R-logo.png
---- .quote .segue .nobackground .dark
+--- &vcenter .large
 
 
 
---- .dark .segue .quote
 
-## Large Scale Learning in R
+<img src="assets/img/MLDMMonday.jpg" class="grayscale fit100" />
+
+Taiwan R User Group
+
+MLDMMonday: 每週一分享資料相關議題
+
+主題包含但不限於：
+
+R 套件使用
+
+機器學習和統計模型
 
 --- &vcenter .large
 
@@ -66,7 +75,7 @@ R 是可以處理大量的數據
 今天從這樣的數據開始
 
 <!-- html table generated in R 3.0.3 by xtable 1.7-3 package -->
-<!-- Sat May 24 00:24:55 2014 -->
+<!-- Sat May 24 01:38:29 2014 -->
 <TABLE border=1>
 <TR> <TH>  </TH> <TH> is_click </TH> <TH> show_time </TH> <TH> client_ip </TH> <TH> adid </TH>  </TR>
   <TR> <TD align="right"> 1 </TD> <TD> FALSE </TD> <TD> 2014/05/17 04:06:52 </TD> <TD> 114.44.x.x </TD> <TD> 133594 </TD> </TR>
@@ -85,7 +94,7 @@ R 是可以處理大量的數據
 ## 問題的建模
 
 <!-- html table generated in R 3.0.3 by xtable 1.7-3 package -->
-<!-- Sat May 24 00:24:55 2014 -->
+<!-- Sat May 24 01:38:29 2014 -->
 <TABLE border=1>
 <TR> <TH>  </TH> <TH> is_click </TH> <TH> show_time </TH> <TH> client_ip </TH> <TH> adid </TH>  </TR>
   <TR> <TD align="right"> 1 </TD> <TD> FALSE </TD> <TD> 2014/05/17 04:06:52 </TD> <TD> 114.44.x.x </TD> <TD> 133594 </TD> </TR>
@@ -566,7 +575,7 @@ objective_function <- function(w) {
 實驗結果
 
 <!-- html table generated in R 3.0.3 by xtable 1.7-3 package -->
-<!-- Sat May 24 00:24:55 2014 -->
+<!-- Sat May 24 01:38:29 2014 -->
 <TABLE border=1>
 <TR> <TH>  </TH> <TH> auc </TH> <TH> Regularization </TH> <TH> FeatureSet </TH> <TH> DayEffect </TH>  </TR>
   <TR> <TD align="right"> 1 </TD> <TD align="right"> 1.0394 </TD> <TD align="right">     1 </TD> <TD> A </TD> <TD> 09:00:00 </TD> </TR>
@@ -597,7 +606,7 @@ objective_function <- function(w) {
 ### 感謝R 強大的分析功能
 
 <!-- html table generated in R 3.0.3 by xtable 1.7-3 package -->
-<!-- Sat May 24 00:24:55 2014 -->
+<!-- Sat May 24 01:38:29 2014 -->
 <TABLE border=1>
 <TR> <TH>  </TH> <TH> row.names  Estimate </TH> <TH> Std. Error </TH> <TH> t value </TH> <TH> Pr(&gt;|t|) </TH>  </TR>
   <TR> <TD align="right"> (Intercept) </TD> <TD align="right"> 1.0343 </TD> <TD align="right"> 0.0009 </TD> <TD align="right"> 1165.2725 </TD> <TD align="right"> 0.0000 </TD> </TR>
