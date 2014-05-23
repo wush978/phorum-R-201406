@@ -55,7 +55,7 @@ R 是可以處理大量的數據
 
 運用R 建立商用推薦引擎的心得
 
-主要是靠著`Rcpp`和`pbdMPI`等包
+主要是靠着`Rcpp`和`pbdMPI`等包
 
 打造可扩放性的學習模組
 
@@ -80,7 +80,7 @@ R 是可以處理大量的數據
 
 - 乾淨
 - 靜止
-- 需要複雜的演算法
+- 需要複雜的算法
 
 --- &vcenter .large
 
@@ -96,7 +96,7 @@ df[[3]] <- NULL
 print(xtable(df), type="html")
 ```
 <br/>
-以「預測點擊發生的機率」為例
+以“預測點擊發生的機率”為例
 
 --- &twocol .large
 
@@ -128,7 +128,7 @@ head(model.matrix(Species ~ ., iris))
 
 有 $10^{3+}$ 筆廣告
 
-每種類別變數可能到 $10^{3}$ 類別
+每種類別变量可能到 $10^{3}$ 類別
 
 --- &vcenter .large
 
@@ -152,36 +152,24 @@ head(model.matrix(Species ~ ., iris))
 
 請使用和其他工具一樣的資料結構:
 
-這種狀況，應該使用`稀疏矩阵`
+這種狀況，應該使用稀疏矩阵
 
 --- &twocolvcenter
 
 *** =left
 
-## 稀疏矩陣
-
-- 只儲存非0的資訊
-
-```{r sparse_matrix_echo, echo=TRUE, eval=FALSE}
-n <- 1
-m1 <- matrix(0, 10^n, 10^n);m1[1, 4] <- 1
-c(m1)
-library(Matrix)
-m2 <- Matrix(0, 10^n, 10^n, sparse=TRUE)
-m2[1,4] <- 1
-str(m2)
+```{r mem1, echo=TRUE}
+library(Matrix); data(KNex)
+class(KNex$mm)[1]
+object.size(KNex$mm)
 ```
 
 *** =right
 
-```{r sparse_matrix_eval, cache=TRUE}
-n <- 1
-m1 <- matrix(0, 10^n, 10^n);m1[1, 4] <- 1
-c(m1)
-library(Matrix)
-m2 <- Matrix(0, 10^n, 10^n, sparse=TRUE)
-m2[1,4] <- 1
-str(m2)
+```{r mem2, echo=TRUE, dependson="mem1"}
+mm <- as(KNex$mm, "matrix")
+class(mm)
+object.size(mm)
 ```
 
 --- &vcenter .large
@@ -190,74 +178,35 @@ str(m2)
 
 大概可以省下 $10^2 \sim 10^3$ 倍記憶體
 
-而且可以大幅度加快運算效能!
+`並且可以大幅加快運算效能`
 
 --- &vcenter .large
 
-如果`m1`, `m2`是 $10^4 \times 10^4$ 的矩陣:
+還可用`Rcpp`實做矩陣-向量的乘法
 
-```{r sparse_mat_efficiency, cache=TRUE}
-library(rbenchmark)
-n <- 4
-m1 <- matrix(0, 10^n, 10^n);m1[1, 4] <- 1
-m2 <- Matrix(0, 10^n, 10^n, sparse=TRUE)
-r <- rnorm(10^n)
-benchmark(
-  m1 %*% r,
-  m2 %*% r)
+我們的實作(C的部分)和BLAS庫比較：
+
+```
+nnz = 1.000000e+06, rows = 1.000000e+05, cols = 1.000000e+03, 
+density = 1.000000e-02, times = 100, nr_threads = 1
+generating data...done 453ms
+CSR Xv:  388ms
+CSR XTv: 288ms
+CSR X^TDXv: 488ms
+CSR X^TDXv (ACC): 367ms
+CSR Xv (MKL):  468ms
+CSR XTv (MKL): 482ms
+CSR X^TDXv (MKL): 529ms
+CSR Xv (NIST):  398ms
+CSR XTv (NIST): 461ms
+error: 0.000000
 ```
 
 --- &vcenter .large
 
-可以利用`Rcpp`將C的實作暴露到R中
+利用`Rcpp`將C的實作暴露到R中
 
-可以利用`Rcpp`做記憶體的重複使用
-
---- &vcenter .large
-
-```{r rcpp_matrix_multiplication_eval, cache=TRUE, engine='Rcpp'}
-#include <Rcpp.h>
-using namespace Rcpp;
-// [[Rcpp::export]]
-SEXP XTv(S4 m, NumericVector v, NumericVector& retval) {
-  int
-    *i = INTEGER(wrap(m.slot("i"))),
-    i_len = Rf_length(wrap(m.slot("i"))),
-    *p = INTEGER(wrap(m.slot("p"))),
-    p_len = Rf_length(wrap(m.slot("p")));
-    NumericVector x = wrap(m.slot("x"));
-  IntegerVector dim(wrap(m.slot("Dim")));
-  if (v.size() != dim[0]) throw std::invalid_argument("");
-  for(int j = 0,k = 0;j < p_len - 1;j++) {
-    while(k < p[j+1]) {
-      retval[j] += x[k]*v[i[k++]];
-    }
-  }
-  return retval;
-}
-```
-
-```{r rcpp_matrix_multiplication_benchmark, cache=TRUE, dependson=c("sparse_mat_efficiency","rcpp_matrix_multiplication_eval"), echo=FALSE}
-retval <- numeric(10^n)
-benchmark(
-  m2 %*% r,
-  XTv(m2, r, retval))
-```
-
-在現代的Rcpp架構下
-
-將C++函數放到R中變得很簡單
-
-我們只需要專注在演算法上
-
-```{r rcpp_matrix_multiplication_echo, cache=TRUE, engine='Rcpp', echo=TRUE}
-#include <Rcpp.h>
-using namespace Rcpp;
-// [[Rcpp::export]]
-SEXP XTv(S4 m, NumericVector v) {
-  //...
-}
-```
+利用`Rcpp`做記憶體的重複使用
 
 --- &vcenter .large
 
@@ -265,35 +214,11 @@ SEXP XTv(S4 m, NumericVector v) {
 
 利用更多CPU和更多記憶體提升效能
 
---- &vcenter .large
-
-$$\left(\begin{array}{c}X_1 \\ X_2\end{array}\right) v = \left(\begin{array}{c}X_1 v \\ X_2 v\end{array}\right)$$
-
-$$\left(v_1 , v_2\right) \left(\begin{array}{c}X_1 \\ X_2\end{array}\right) = v_1 X_1 + v_2 X_2$$
-
---- &twocolvcenter .large
-
-***=left
-
-## MPI
-
-### 記憶體足夠的話，較快
-
-### 沒有容錯
-
-***=right
-
-## Hadoop
-
-### 慢，要大量機器才有效果
-
-### 有容錯
+$$\left(\begin{array}{c}X_1 \\ X_2\end{array}\right) w = \left(\begin{array}{c}X_1 w \\ X_2 w\end{array}\right)$$
 
 --- &vcenter .large
 
 `pbdMPI`是[pbdR(Programming with Big Data in R)](http://r-pbd.org/)專案的套件之一
-
-<img src="assets/img/pbdMPI.png" class="fit50" />
 
 --- &twocolvcenter .large
 
@@ -319,11 +244,11 @@ finalize()
 
 *** =left
 
-## 最佳化演算法
+## 最佳化算法
 
-### 迭代次數少
+### 快速
 ### 不用計算Hessian矩陣
-### 已有很棒的實作[LIBLINEAR](http://www.csie.ntu.edu.tw/~cjlin/liblinear/)
+### 很棒的實作[LIBLINEAR](http://www.csie.ntu.edu.tw/~cjlin/liblinear/)
 
 *** =right
 
@@ -356,7 +281,7 @@ private:
 };
 ```
 
-- TRON是最佳化的核心演算法的實作
+- TRON是最佳化的核心算法的實作
 - TRON沒有牽涉到資料，甚至沒有牽涉到Loss Function
 - `function`提供了一個界面
 
@@ -503,13 +428,6 @@ hs <- new(HsTrust, objective_function, ...)
 
 --- &vcenter .large
 
-SPMD架構
-
-<img src="assets/img/SPMD.png" class="fit100"/>
-
-
---- &vcenter .large
-
 `objective_function`非常易於修改
 
 所以我們能將注意力專注於模型上
@@ -617,14 +535,16 @@ ec2_request_spot_instances <- function(spot_price, instance_count, launch_specif
 }
 ```
 
---- &vcenter .large
+--- &vcenter
+
+## 總結
 
 R 是可以對大量數據進行處理：
 
-### 使用`Matrix`套件的稀疏矩陣
-### `Rcpp`高效能的使用記憶體
-### `Rcpp`整合第三方的庫
-### `pbdMPI`建立分散式平行運算叢集
+- 使用`Matrix`套件的稀疏矩陣
+- `Rcpp`高效能的使用記憶體
+- `Rcpp`整合第三方的庫
+- `pbdMPI`建立分散式平行運算叢集
 
 --- &vcenter .large
 

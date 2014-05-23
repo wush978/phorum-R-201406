@@ -66,7 +66,7 @@ R 是可以處理大量的數據
 今天從這樣的數據開始
 
 <!-- html table generated in R 3.0.3 by xtable 1.7-3 package -->
-<!-- Thu May 22 21:49:11 2014 -->
+<!-- Sat May 24 00:24:55 2014 -->
 <TABLE border=1>
 <TR> <TH>  </TH> <TH> is_click </TH> <TH> show_time </TH> <TH> client_ip </TH> <TH> adid </TH>  </TR>
   <TR> <TD align="right"> 1 </TD> <TD> FALSE </TD> <TD> 2014/05/17 04:06:52 </TD> <TD> 114.44.x.x </TD> <TD> 133594 </TD> </TR>
@@ -85,7 +85,7 @@ R 是可以處理大量的數據
 ## 問題的建模
 
 <!-- html table generated in R 3.0.3 by xtable 1.7-3 package -->
-<!-- Thu May 22 21:49:11 2014 -->
+<!-- Sat May 24 00:24:55 2014 -->
 <TABLE border=1>
 <TR> <TH>  </TH> <TH> is_click </TH> <TH> show_time </TH> <TH> client_ip </TH> <TH> adid </TH>  </TR>
   <TR> <TD align="right"> 1 </TD> <TD> FALSE </TD> <TD> 2014/05/17 04:06:52 </TD> <TD> 114.44.x.x </TD> <TD> 133594 </TD> </TR>
@@ -155,49 +155,47 @@ head(model.matrix(Species ~ ., iris))
 
 請使用和其他工具一樣的資料結構:
 
-這種狀況，應該使用稀疏矩阵
+這種狀況，應該使用`稀疏矩阵`
 
 --- &twocolvcenter
 
 *** =left
 
+## 稀疏矩陣
+
+- 只儲存非0的資訊
+
 
 ```r
-library(Matrix); data(KNex)
-class(KNex$mm)[1]
-```
-
-```
-[1] "dgCMatrix"
-```
-
-```r
-object.size(KNex$mm)
-```
-
-```
-109336 bytes
+n <- 1
+m1 <- matrix(0, 10^n, 10^n);m1[1, 4] <- 1
+c(m1)
+library(Matrix)
+m2 <- Matrix(0, 10^n, 10^n, sparse=TRUE)
+m2[1,4] <- 1
+str(m2)
 ```
 
 
 *** =right
 
 
-```r
-mm <- as(KNex$mm, "matrix")
-class(mm)
+```
+  [1] 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+ [48] 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+ [95] 0 0 0 0 0 0
 ```
 
 ```
-[1] "matrix"
-```
-
-```r
-object.size(mm)
-```
-
-```
-10537968 bytes
+Formal class 'dgCMatrix' [package "Matrix"] with 6 slots
+  ..@ i       : int 0
+  ..@ p       : int [1:11] 0 0 0 0 1 1 1 1 1 1 ...
+  ..@ Dim     : int [1:2] 10 10
+  ..@ Dimnames:List of 2
+  .. ..$ : NULL
+  .. ..$ : NULL
+  ..@ x       : num 1
+  ..@ factors : list()
 ```
 
 
@@ -207,35 +205,55 @@ object.size(mm)
 
 大概可以省下 $10^2 \sim 10^3$ 倍記憶體
 
-`並且可以大幅加快運算效能`
+而且可以大幅度加快運算效能!
 
 --- &vcenter .large
 
-還可用`Rcpp`實做矩陣-向量的乘法
+如果`m1`, `m2`是 $10^4 \times 10^4$ 的矩陣:
 
-我們的實作(C的部分)和BLAS庫比較：
 
 ```
-nnz = 1.000000e+06, rows = 1.000000e+05, cols = 1.000000e+03, 
-density = 1.000000e-02, times = 100, nr_threads = 1
-generating data...done 453ms
-CSR Xv:  388ms
-CSR XTv: 288ms
-CSR X^TDXv: 488ms
-CSR X^TDXv (ACC): 367ms
-CSR Xv (MKL):  468ms
-CSR XTv (MKL): 482ms
-CSR X^TDXv (MKL): 529ms
-CSR Xv (NIST):  398ms
-CSR XTv (NIST): 461ms
-error: 0.000000
+      test replications elapsed relative user.self sys.self user.child sys.child
+1 m1 %*% r          100  21.690      868    47.727    0.217          0         0
+2 m2 %*% r          100   0.025        1     0.021    0.003          0         0
 ```
+
 
 --- &vcenter .large
 
-利用`Rcpp`將C的實作暴露到R中
+可以利用`Rcpp`將C的實作暴露到R中
 
-利用`Rcpp`做記憶體的重複使用
+可以利用`Rcpp`做記憶體的重複使用
+
+--- &vcenter .large
+
+
+
+
+
+```
+                test replications elapsed relative user.self sys.self user.child sys.child
+1           m2 %*% r          100   0.023     7.67     0.021    0.002          0         0
+2 XTv(m2, r, retval)          100   0.003     1.00     0.002    0.000          0         0
+```
+
+
+在現代的Rcpp架構下
+
+將C++函數放到R中變得很簡單
+
+我們只需要專注在演算法上
+
+
+```cpp
+#include <Rcpp.h>
+using namespace Rcpp;
+// [[Rcpp::export]]
+SEXP XTv(S4 m, NumericVector v) {
+  //...
+}
+```
+
 
 --- &vcenter .large
 
@@ -243,11 +261,35 @@ error: 0.000000
 
 利用更多CPU和更多記憶體提升效能
 
-$$\left(\begin{array}{c}X_1 \\ X_2\end{array}\right) w = \left(\begin{array}{c}X_1 w \\ X_2 w\end{array}\right)$$
+--- &vcenter .large
+
+$$\left(\begin{array}{c}X_1 \\ X_2\end{array}\right) v = \left(\begin{array}{c}X_1 v \\ X_2 v\end{array}\right)$$
+
+$$\left(v_1 , v_2\right) \left(\begin{array}{c}X_1 \\ X_2\end{array}\right) = v_1 X_1 + v_2 X_2$$
+
+--- &twocolvcenter .large
+
+***=left
+
+## MPI
+
+### 記憶體足夠的話，較快
+
+### 沒有容錯
+
+***=right
+
+## Hadoop
+
+### 慢，要大量機器才有效果
+
+### 有容錯
 
 --- &vcenter .large
 
 `pbdMPI`是[pbdR(Programming with Big Data in R)](http://r-pbd.org/)專案的套件之一
+
+<img src="assets/img/pbdMPI.png" class="fit50" />
 
 --- &twocolvcenter .large
 
@@ -277,9 +319,9 @@ finalize()
 
 ## 最佳化演算法
 
-### 快速
+### 迭代次數少
 ### 不用計算Hessian矩陣
-### 很棒的實作[LIBLINEAR](http://www.csie.ntu.edu.tw/~cjlin/liblinear/)
+### 已有很棒的實作[LIBLINEAR](http://www.csie.ntu.edu.tw/~cjlin/liblinear/)
 
 *** =right
 
@@ -472,6 +514,13 @@ hs <- new(HsTrust, objective_function, ...)
 
 --- &vcenter .large
 
+SPMD架構
+
+<img src="assets/img/SPMD.png" class="fit100"/>
+
+
+--- &vcenter .large
+
 `objective_function`非常易於修改
 
 所以我們能將注意力專注於模型上
@@ -517,7 +566,7 @@ objective_function <- function(w) {
 實驗結果
 
 <!-- html table generated in R 3.0.3 by xtable 1.7-3 package -->
-<!-- Thu May 22 21:49:14 2014 -->
+<!-- Sat May 24 00:24:55 2014 -->
 <TABLE border=1>
 <TR> <TH>  </TH> <TH> auc </TH> <TH> Regularization </TH> <TH> FeatureSet </TH> <TH> DayEffect </TH>  </TR>
   <TR> <TD align="right"> 1 </TD> <TD align="right"> 1.0394 </TD> <TD align="right">     1 </TD> <TD> A </TD> <TD> 09:00:00 </TD> </TR>
@@ -548,7 +597,7 @@ objective_function <- function(w) {
 ### 感謝R 強大的分析功能
 
 <!-- html table generated in R 3.0.3 by xtable 1.7-3 package -->
-<!-- Thu May 22 21:49:14 2014 -->
+<!-- Sat May 24 00:24:55 2014 -->
 <TABLE border=1>
 <TR> <TH>  </TH> <TH> row.names  Estimate </TH> <TH> Std. Error </TH> <TH> t value </TH> <TH> Pr(&gt;|t|) </TH>  </TR>
   <TR> <TD align="right"> (Intercept) </TD> <TD align="right"> 1.0343 </TD> <TD align="right"> 0.0009 </TD> <TD align="right"> 1165.2725 </TD> <TD align="right"> 0.0000 </TD> </TR>
@@ -609,16 +658,14 @@ ec2_request_spot_instances <- function(spot_price, instance_count, launch_specif
 ```
 
 
---- &vcenter
-
-## 總結
+--- &vcenter .large
 
 R 是可以對大量數據進行處理：
 
-- 使用`Matrix`套件的稀疏矩陣
-- `Rcpp`高效能的使用記憶體
-- `Rcpp`整合第三方的庫
-- `pbdMPI`建立分散式平行運算叢集
+### 使用`Matrix`套件的稀疏矩陣
+### `Rcpp`高效能的使用記憶體
+### `Rcpp`整合第三方的庫
+### `pbdMPI`建立分散式平行運算叢集
 
 --- &vcenter .large
 
@@ -628,6 +675,6 @@ R 是可以對大量數據進行處理：
 
 和我在Bridgewell Inc.的合作
 
---- &vcenter
+--- &vcenter .large
 
 Q&A
