@@ -1,3 +1,4 @@
+file.copy("index.Rmd", "index.Rmd.bak", overwrite=TRUE)
 zh2TW <- readLines("zh2TW.txt")
 zh2TW <- strsplit(zh2TW, " ", fixed=TRUE)
 

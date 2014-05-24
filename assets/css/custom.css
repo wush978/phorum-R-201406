@@ -44,3 +44,19 @@ img.grayscale {
   left: 0;
   width: 100%;
 }
+
+img.logo {
+  -webkit-filter: grayscale(100%);
+  -moz-filter: grayscale(100%);
+  -ms-filter: grayscale(100%);
+  -o-filter: grayscale(100%);
+  filter: grayscale(100%);
+  filter: url(grayscale.svg); /* Firefox 4+ */
+  filter: gray; /* IE 6-9 */
+  opacity: 0.3;
+  z-index: -1;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 15%;
+}

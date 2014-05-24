@@ -10,7 +10,7 @@ widgets     : [mathjax]            # {mathjax, quiz, bootstrap}
 mode        : selfcontained # {standalone, draft}
 license: by-nc-sa
 logo: Taiwan-R-logo.png
---- &vcenternobg .large
+--- &vcenter .large
 
 ```{r setup, include=FALSE,echo = F, message = F, warning = F, tidy = F, cache=FALSE}
 # make this an external chunk that can be included in any file
@@ -40,60 +40,60 @@ bib <- read.bib("index.bib")
 
 Taiwan R User Group
 
-MLDMMonday: 每周一分享资料相关议题
+MLDMMonday: 每週一分享資料相關議題
 
-主题包含但不限于：
+主題包含但不限於：
 
 R 套件使用
 
-机器学习和统计模型
+機器學習和統計模型
 
 --- &vcenter .large
 
-很多人都在诟病R 无法处理大量的数据
+很多人都在詬病R 無法處理大量的數據
 
 --- &vcenter .large
 
-但是只要用对R 的包
+但是只要用對R 的包
 
-R 是可以处理大量的数据
+R 是可以處理大量的數據
 
 --- &vcenter .large
 
 今天我想跟大家分享
 
-运用R 建立商用推荐引擎的心得
+運用R 建立商用推薦引擎的心得
 
-主要是靠着`Rcpp`和`pbdMPI`等包
+主要是靠著`Rcpp`和`pbdMPI`等包
 
-打造可扩放性的学习模组
+打造可扩放性的學習模組
 
 --- &vcenter .large
 
-实际的数据和课本上的数据是不一样的
+實際的數據和課本上的數據是不一樣的
 
 --- &twocolvcenter
 
 *** =left
 
-## 实际的数据
+## 實際的數據
 
-- 乱、充满错误
-- 不停的变动
-- 不知道怎样才算好
-    - 只能不断精益求精
+- 亂、充滿錯誤
+- 不停的變動
+- 不知道怎樣才算好
+    - 只能不斷精益求精
 
 *** =right
 
-## 课本的数据
+## 課本的數據
 
-- 干净
-- 静止
-- 需要复杂的算法
+- 乾淨
+- 靜止
+- 需要複雜的演算法
 
 --- &vcenter .large
 
-今天从这样的数据开始
+今天從這樣的數據開始
 
 ```{r demo_data, results='asis'}
 df <- read.table("demo_data.txt")
@@ -105,11 +105,11 @@ df[[3]] <- NULL
 print(xtable(df), type="html")
 ```
 <br/>
-以“预测点击发生的机率”为例
+以「預測點擊發生的機率」為例
 
 --- &twocol .large
 
-## 问题的建模
+## 問題的建模
 
 ```{r demo_data2, dependson="demo_data", results='asis'}
 print(xtable(df), type="html")
@@ -131,45 +131,45 @@ head(model.matrix(Species ~ ., iris))
 
 --- &vcenter .large
 
-实际的资料
+實際的資料
 
-有 $10^{9+}$ 笔资料
+有 $10^{9+}$ 筆資料
 
-有 $10^{3+}$ 笔广告
+有 $10^{3+}$ 筆廣告
 
-每种类别变量可能到 $10^{3}$ 类别
-
---- &vcenter .large
-
-`model.matrix`的后果：
-
-至少需要 $10^9 \times (10^3...)$ 个位元
-
-也就是 $`r 10^12 / 2^30 / 8`$ GB的记忆体
+每種類別變數可能到 $10^{3}$ 類別
 
 --- &vcenter .large
 
-开始抱怨了!
+`model.matrix`的後果：
 
-### R 不能处理大量的数据
+至少需要 $10^9 \times (10^3...)$ 個位元
 
-### R 会吃很多记忆体
-
-### 使用R 跑不动，使用其他工具就跑得动
+也就是 $`r 10^12 / 2^30 / 8`$ GB的記憶體
 
 --- &vcenter .large
 
-请使用和其他工具一样的资料结构:
+開始抱怨了!
 
-这种状况，应该使用`稀疏矩阵`
+### R 不能處理大量的數據
+
+### R 會吃很多記憶體
+
+### 使用R 跑不動，使用其他工具就跑得動
+
+--- &vcenter .large
+
+請使用和其他工具一樣的資料結構:
+
+這種狀況，應該使用`稀疏矩阵`
 
 --- &twocolvcenter
 
 *** =left
 
-## 稀疏矩阵
+## 稀疏矩陣
 
-- 只储存非0的资讯
+- 只儲存非0的資訊
 
 ```{r sparse_matrix_echo, echo=TRUE, eval=FALSE}
 n <- 1
@@ -195,15 +195,15 @@ str(m2)
 
 --- &vcenter .large
 
-在我手上的资料上
+在我手上的資料上
 
-大概可以省下 $10^2 \sim 10^3$ 倍记忆体
+大概可以省下 $10^2 \sim 10^3$ 倍記憶體
 
-而且可以大幅度加快运算效能!
+而且可以大幅度加快運算效能!
 
 --- &vcenter .large
 
-如果`m1`, `m2`是 $10^4 \times 10^4$ 的矩阵:
+如果`m1`, `m2`是 $10^4 \times 10^4$ 的矩陣:
 
 ```{r sparse_mat_efficiency, cache=TRUE}
 library(rbenchmark)
@@ -218,9 +218,9 @@ benchmark(
 
 --- &vcenter .large
 
-可以利用`Rcpp`将C的实作暴露到R中
+可以利用`Rcpp`將C的實作暴露到R中
 
-可以利用`Rcpp`做记忆体的重复使用
+可以利用`Rcpp`做記憶體的重複使用
 
 --- &vcenter .large
 
@@ -253,11 +253,11 @@ benchmark(
   XTv(m2, r, retval))
 ```
 
-在现代的Rcpp架构下
+在現代的Rcpp架構下
 
-将C++函数放到R中变得很简单
+將C++函數放到R中變得很簡單
 
-我们只需要专注在算法上
+我們只需要專注在演算法上
 
 ```{r rcpp_matrix_multiplication_echo, cache=TRUE, engine='Rcpp', echo=TRUE}
 #include <Rcpp.h>
@@ -270,9 +270,9 @@ SEXP XTv(S4 m, NumericVector v) {
 
 --- &vcenter .large
 
-再透过`pbdMPI`开发分散式矩阵乘法
+再透過`pbdMPI`開發分散式矩陣乘法
 
-利用更多CPU和更多记忆体提升效能
+利用更多CPU和更多記憶體提升效能
 
 --- &vcenter .large
 
@@ -286,21 +286,21 @@ $$\left(v_1 , v_2\right) \left(\begin{array}{c}X_1 \\ X_2\end{array}\right) = v_
 
 ## MPI
 
-### 记忆体足够的话，较快
+### 記憶體足夠的話，較快
 
-### 没有容错
+### 沒有容錯
 
 ***=right
 
 ## Hadoop
 
-### 慢，要大量机器才有效果
+### 慢，要大量機器才有效果
 
-### 有容错
+### 有容錯
 
 --- &vcenter .large
 
-`pbdMPI`是[pbdR(Programming with Big Data in R)](http://r-pbd.org/)专案的套件之一
+`pbdMPI`是[pbdR(Programming with Big Data in R)](http://r-pbd.org/)專案的套件之一
 
 <img src="assets/img/pbdMPI.png" class="fit50" />
 
@@ -308,10 +308,10 @@ $$\left(v_1 , v_2\right) \left(\begin{array}{c}X_1 \\ X_2\end{array}\right) = v_
 
 *** =left
 
-## pbdMPI的优点
+## pbdMPI的優點
 
-### 好安装
-### 好开发
+### 好安裝
+### 好開發
 
 *** =right
 
@@ -328,11 +328,11 @@ finalize()
 
 *** =left
 
-## 最佳化算法
+## 最佳化演算法
 
-### 迭代次数少
-### 不用计算Hessian矩阵
-### 已有很棒的实作[LIBLINEAR](http://www.csie.ntu.edu.tw/~cjlin/liblinear/)
+### 迭代次數少
+### 不用計算Hessian矩陣
+### 已有很棒的實作[LIBLINEAR](http://www.csie.ntu.edu.tw/~cjlin/liblinear/)
 
 *** =right
 
@@ -340,15 +340,15 @@ finalize()
 
 --- &vcenter .large
 
-为了加强效能
+為了加強效能
 
-并且能够更方便的更改模型
+並且能夠更方便的更改模型
 
-我们自己包LIBLINEAR到R中
+我們自己包LIBLINEAR到R中
 
 --- &vcenter .large
 
-## LIBLINEAR 原始码中的 `tron.h`
+## LIBLINEAR 原始碼中的 `tron.h`
 
 ```{r tron, engine='Rcpp', eval=FALSE, echo=TRUE}
 class TRON
@@ -357,7 +357,7 @@ public:
   TRON(const function *fun_obj, double eps = 0.1, int max_iter = 1000);
   ~TRON();
 
-  void tron(double *w);
+	void tron(double *w);
 	void set_print_string(void (*i_print) (const char *buf));
 
 private:
@@ -365,9 +365,9 @@ private:
 };
 ```
 
-- TRON是最佳化的核心算法的实作
-- TRON没有牵涉到资料，甚至没有牵涉到Loss Function
-- `function`提供了一个界面
+- TRON是最佳化的核心演算法的實作
+- TRON沒有牽涉到資料，甚至沒有牽涉到Loss Function
+- `function`提供了一個界面
 
 --- &vcenter
 
@@ -388,7 +388,7 @@ public:
 
 - `fun`代表objective function
 - `grad`是`fun`的gradient
-- `Hv`是`fun`的hessian乘上一个向量
+- `Hv`是`fun`的hessian乘上一個向量
 
 --- &twocolvcenter .large
 
@@ -396,7 +396,7 @@ public:
 
 *** =left
 
-### 实作Rfunction
+### 實作Rfunction
 
 ```{r Rfunction, engine='Rcpp', eval=FALSE, echo=TRUE}
 class Rfunction : public ::function {
@@ -414,7 +414,7 @@ SEXP tron//...
 
 *** =right
 
-将Rfunction暴露出来
+將Rfunction暴露出來
 
 ```{r Rfunction_module, engine='Rcpp', eval=FALSE, echo=TRUE}
 RCPP_MODULE(HsTrust) {  
@@ -433,7 +433,7 @@ RCPP_MODULE(HsTrust) {
 
 *** =left
 
-实作的结果可包装成[套件](https://bitbucket.org/wush978/largescalelogisticregression/src/4daf9c5bba5cd0e4f35afd813866e6da72ca92bb/?at=hstrust)
+實作的結果可包裝成[套件](https://bitbucket.org/wush978/largescalelogisticregression/src/4daf9c5bba5cd0e4f35afd813866e6da72ca92bb/?at=hstrust)
 
 
 ```{r, eval=FALSE, echo=TRUE}
@@ -492,11 +492,11 @@ print(r <- obj$tron(1e-4, TRUE))
 
 --- &vcenter .large
 
-结合`pbdMPI`和`Rcpp Modules`
+結合`pbdMPI`和`Rcpp Modules`
 
-让TRON呼叫分散式的运算系统
+讓TRON呼叫分散式的運算系統
 
-SPMD架构，无master，一次资料交换
+SPMD架構，無master，一次資料交換
 
 ```{r, eval=FALSE, echo=TRUE}
 objective_function <- function(w) {
@@ -512,16 +512,16 @@ hs <- new(HsTrust, objective_function, ...)
 
 --- &vcenter .large
 
-SPMD架构
+SPMD架構
 
 <img src="assets/img/SPMD.png" class="fit100"/>
 
 
 --- &vcenter .large
 
-`objective_function`非常易于修改
+`objective_function`非常易於修改
 
-所以我们能将注意力专注于模型上
+所以我們能將注意力專注於模型上
 
 ```{r, eval=FALSE, echo=TRUE}
 objective_function <- function(w) {
@@ -535,13 +535,13 @@ objective_function <- function(w) {
 
 --- &vcenter .large
 
-终于跨过资料量的门槛了...
+終於跨過資料量的門檻了...
 
-该看看资料了！
+該看看資料了！
 
 --- .dark .segue
 
-## 资料越大，结果就会越好吗？
+## 資料越大，結果就會越好嗎？
 
 ---
 
@@ -549,17 +549,17 @@ objective_function <- function(w) {
 
 --- .dark .segue
 
-## 不同的模型对预测会有影响吗？
+## 不同的模型對預測會有影響嗎？
 
 --- &vcenter .large
 
-因子的组合
+因子的組合
 
 <img src="assets/img/factors.png" class="fit100" />
 
 --- &vcenter .large
 
-实验结果
+實驗結果
 
 ```{r exp, echo=FALSE, results='asis'}
 print(xtable(head(read.csv("exp.csv", header=TRUE), 20), digits=4), type="html")
@@ -569,13 +569,13 @@ print(xtable(head(read.csv("exp.csv", header=TRUE), 20), digits=4), type="html")
 
 分析
 
-### 感谢R 强大的分析功能
+### 感謝R 強大的分析功能
 
 ```{r result, echo=FALSE, results='asis'}
 print(xtable(read.csv("result.csv", sep="\t", check.names=FALSE), digits=4), type="html")
 ```
 
-### 平均来说FeatureSet B 好 $0.5\%$
+### 平均來說FeatureSet B 好 $0.5\%$
 
 --- &vcenter .large
 
@@ -596,13 +596,13 @@ ggplot(df2, aes(x=date, y=ratio)) +
 
 ## 其他的工程面分享
 
-### 处理大量数据需要很多工程
+### 處理大量數據需要很多工程
 
 --- &vcenter .large
 
 R Packages + Git + Jenkins:
 
-开发后自动测试、部署和版本控制
+開發後自動測試、部署和版本控制
 
 <img src="assets/img/jenkins.png" class="fit50"/>
 
@@ -616,7 +616,7 @@ R Packages + Git + Jenkins:
 
 R + [rjson]() + [awscli](https://aws.amazon.com/cn/cli/)
 
-自动利用AWS建立云端实验用Cluster
+自動利用AWS建立雲端實驗用Cluster
 
 ```{r, eval=FALSE, echo=TRUE}
 ec2_request_spot_instances <- function(spot_price, instance_count, launch_specification = list()) {
@@ -628,18 +628,18 @@ ec2_request_spot_instances <- function(spot_price, instance_count, launch_specif
 
 --- &vcenter .large
 
-R 是可以对大量数据进行处理：
+R 是可以對大量數據進行處理：
 
-### 使用`Matrix`套件的稀疏矩阵
-### `Rcpp`高效能的使用记忆体
-### `Rcpp`整合第三方的库
-### `pbdMPI`建立分散式平行运算丛集
+### 使用`Matrix`套件的稀疏矩陣
+### `Rcpp`高效能的使用記憶體
+### `Rcpp`整合第三方的庫
+### `pbdMPI`建立分散式平行運算叢集
 
 --- &vcenter .large
 
-关于今天分享的工作
+關於今天分享的工作
 
-感谢两位同学Y.-C. Juan, Y. Zhuang
+感謝兩位同學Y.-C. Juan, Y. Zhuang
 
 和我在Bridgewell Inc.的合作
 
