@@ -75,7 +75,7 @@ R 是可以处理大量的数据
 今天从这样的数据开始
 
 <!-- html table generated in R 3.0.3 by xtable 1.7-3 package -->
-<!-- Sun May 25 00:30:10 2014 -->
+<!-- Sun May 25 08:11:21 2014 -->
 <TABLE border=1>
 <TR> <TH>  </TH> <TH> is_click </TH> <TH> show_time </TH> <TH> client_ip </TH> <TH> adid </TH>  </TR>
   <TR> <TD align="right"> 1 </TD> <TD> FALSE </TD> <TD> 2014/05/17 04:06:52 </TD> <TD> 114.44.x.x </TD> <TD> 133594 </TD> </TR>
@@ -94,7 +94,7 @@ R 是可以处理大量的数据
 ## 问题的建模
 
 <!-- html table generated in R 3.0.3 by xtable 1.7-3 package -->
-<!-- Sun May 25 00:30:10 2014 -->
+<!-- Sun May 25 08:11:21 2014 -->
 <TABLE border=1>
 <TR> <TH>  </TH> <TH> is_click </TH> <TH> show_time </TH> <TH> client_ip </TH> <TH> adid </TH>  </TR>
   <TR> <TD align="right"> 1 </TD> <TD> FALSE </TD> <TD> 2014/05/17 04:06:52 </TD> <TD> 114.44.x.x </TD> <TD> 133594 </TD> </TR>
@@ -258,7 +258,7 @@ Formal class 'dgCMatrix' [package "Matrix"] with 6 slots
 #include <Rcpp.h>
 using namespace Rcpp;
 // [[Rcpp::export]]
-SEXP XTv(S4 m, NumericVector v) {
+SEXP XTv(S4 m, NumericVector v, NumericVector& retval) {
   //...
 }
 ```
@@ -575,7 +575,7 @@ objective_function <- function(w) {
 实验结果
 
 <!-- html table generated in R 3.0.3 by xtable 1.7-3 package -->
-<!-- Sun May 25 00:30:10 2014 -->
+<!-- Sun May 25 08:11:24 2014 -->
 <TABLE border=1>
 <TR> <TH>  </TH> <TH> auc </TH> <TH> Regularization </TH> <TH> FeatureSet </TH> <TH> DayEffect </TH>  </TR>
   <TR> <TD align="right"> 1 </TD> <TD align="right"> 1.0394 </TD> <TD align="right">     1 </TD> <TD> A </TD> <TD> 09:00:00 </TD> </TR>
@@ -606,7 +606,7 @@ objective_function <- function(w) {
 ### 感谢R 强大的分析功能
 
 <!-- html table generated in R 3.0.3 by xtable 1.7-3 package -->
-<!-- Sun May 25 00:30:10 2014 -->
+<!-- Sun May 25 08:11:24 2014 -->
 <TABLE border=1>
 <TR> <TH>  </TH> <TH> row.names  Estimate </TH> <TH> Std. Error </TH> <TH> t value </TH> <TH> Pr(&gt;|t|) </TH>  </TR>
   <TR> <TD align="right"> (Intercept) </TD> <TD align="right"> 1.0343 </TD> <TD align="right"> 0.0009 </TD> <TD align="right"> 1165.2725 </TD> <TD align="right"> 0.0000 </TD> </TR>

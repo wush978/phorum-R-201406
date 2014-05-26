@@ -263,7 +263,7 @@ benchmark(
 #include <Rcpp.h>
 using namespace Rcpp;
 // [[Rcpp::export]]
-SEXP XTv(S4 m, NumericVector v) {
+SEXP XTv(S4 m, NumericVector v, NumericVector& retval) {
   //...
 }
 ```
